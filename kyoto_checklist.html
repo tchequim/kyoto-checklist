@@ -44,7 +44,6 @@
     overflow-x: hidden;
   }
 
-  /* ── KANJI WATERMARK ── */
   #kanjiBg {
     position: fixed;
     inset: 0;
@@ -61,7 +60,6 @@
     line-height: 1;
   }
 
-  /* ── HEADER ── */
   .header {
     background: #fff;
     border-bottom: 3px solid var(--red);
@@ -112,10 +110,7 @@
     text-transform: uppercase;
     margin-top: 3px;
   }
-  /* Nissan logo mark */
-  .nissan-logo {
-    flex-shrink: 0;
-  }
+  .nissan-logo { flex-shrink: 0; }
   .header-omotenashi {
     font-family: 'Noto Serif JP', serif;
     font-size: 26px;
@@ -127,7 +122,6 @@
     flex-shrink: 0;
   }
 
-  /* ── DATE BAR ── */
   .date-bar {
     text-align: center;
     padding: 10px 16px 0;
@@ -140,7 +134,6 @@
     z-index: 1;
   }
 
-  /* ── TURNO BANNER ── */
   .turno-banner {
     margin: 18px 16px 0;
     border-radius: 10px;
@@ -192,7 +185,6 @@
     line-height: 1;
   }
 
-  /* ── PROGRESS ── */
   .progress-section {
     padding: 14px 16px 0;
     position: relative; z-index: 1;
@@ -221,7 +213,6 @@
   .progress-step.done   { color: var(--red); border-color: #e8aab8; background: var(--red-light); }
   .progress-step.active { color: var(--text); border-color: var(--border-strong); background: var(--surface2); }
 
-  /* ── OMOTENASHI DIVIDER ── */
   .omotenashi-bar {
     margin: 18px 16px 0;
     height: 36px;
@@ -266,7 +257,6 @@
     color: var(--text-dim);
   }
 
-  /* ── SECTIONS ── */
   .section {
     margin: 14px 16px 0;
     background: var(--surface);
@@ -293,7 +283,6 @@
     font-weight: 500;
   }
 
-  /* ── SUCURSAL ── */
   .sucursal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -325,7 +314,6 @@
     color: inherit; letter-spacing: 0;
   }
 
-  /* ── CHECKLIST ── */
   .checklist-body { padding: 4px 0; }
   .check-item {
     display: flex; align-items: flex-start;
@@ -356,7 +344,6 @@
   }
   .check-item.checked .check-label { color: var(--text); font-weight: 400; }
 
-  /* ── OBSERVACIONES ── */
   .obs-body { padding: 14px 18px; }
   textarea {
     width: 100%; min-height: 88px;
@@ -375,7 +362,6 @@
   }
   textarea::placeholder { color: var(--text-dim); }
 
-  /* ── SUBMIT ── */
   .submit-zone {
     padding: 18px 16px 0;
     position: relative; z-index: 1;
@@ -411,7 +397,6 @@
     pointer-events: none;
   }
 
-  /* ── TOAST ── */
   .toast {
     position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(100px);
@@ -426,7 +411,6 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast.error { border-left-color: #e05050; }
 
-  /* ── ALL DONE ── */
   .all-done {
     text-align: center; padding: 44px 24px;
     position: relative; z-index: 1;
@@ -449,7 +433,6 @@
     display: block;
   }
 
-  /* ── LOADING ── */
   .loading {
     text-align: center; padding: 60px 20px;
     font-family: 'DM Mono', monospace;
@@ -468,10 +451,8 @@
 </head>
 <body>
 
-<!-- KANJI WATERMARK -->
 <div id="kanjiBg"></div>
 
-<!-- HEADER -->
 <header class="header">
   <div class="header-stripe"></div>
   <div class="header-body">
@@ -480,7 +461,6 @@
       <div class="brand-kyoto">KYOTO</div>
       <div class="brand-nissan">Nissan — Salón de Ventas</div>
     </div>
-    <!-- Nissan emblem -->
     <svg class="nissan-logo" width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50" cy="50" rx="47" ry="47" stroke="#c3002f" stroke-width="4.5" fill="white"/>
       <ellipse cx="50" cy="50" rx="36" ry="36" stroke="#c3002f" stroke-width="2" fill="white"/>
@@ -491,13 +471,11 @@
   </div>
 </header>
 
-<!-- LOADING -->
 <div id="loadingState" class="loading">
   <div class="spinner"></div>
   CARGANDO...
 </div>
 
-<!-- APP -->
 <div id="appState" class="hidden">
 
   <div class="date-bar" id="dateBar"></div>
@@ -520,7 +498,6 @@
     <span class="omo-label">Excelencia en el servicio</span>
   </div>
 
-  <!-- ESTADO: todo completo o turno ya hecho -->
   <div id="allDoneState" class="hidden">
     <div class="all-done">
       <div class="all-done-icon">✅</div>
@@ -530,7 +507,6 @@
     </div>
   </div>
 
-  <!-- FORMULARIO -->
   <div id="formState">
 
     <div class="section">
@@ -585,13 +561,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// REEMPLAZÁ ESTA URL POR LA DE TU WEB APP DE APPS SCRIPT
-// ============================================================
-const SCRIPT_URL = 'PEGAR_ACA_LA_URL_DE_TU_WEB_APP';
-// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSRBkLmakUhjuOYRo6BxjQFT3oMg6wIV-VrK31PbR6epB-gsm3WJMInrUWv4lv0hMV/exec';
 
-// ── KANJI BACKGROUND ──
 (function() {
   const words = [
     'おもてなし','日産','歓迎','丁寧','感謝','誠実','品質','信頼',
@@ -621,7 +592,6 @@ const SCRIPT_URL = 'PEGAR_ACA_LA_URL_DE_TU_WEB_APP';
   }
 })();
 
-// ── TURNOS ──
 const TURNOS = {
   apertura: {
     nombre:'Apertura', icon:'🔓', clase:'apertura', btnClase:'apertura-btn', kanji:'開始',
