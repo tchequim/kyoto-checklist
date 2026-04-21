@@ -773,7 +773,7 @@ function selectSucursal(btn) {
 }
 function updateSubmitBtn() {
   const btn = document.getElementById('submitBtn');
-  btn.disabled = !(state.sucursal && Object.values(state.checks).every(v => v));
+  btn.disabled = !state.sucursal;
 }
 function renderSubmitBtn() {
   const btn = document.getElementById('submitBtn');
