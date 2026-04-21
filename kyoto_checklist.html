@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYOTO Nissan — Check List Diario</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f7f5;
+    --surface: #ffffff;
+    --surface2: #f3f2f0;
+    --border: #e2deda;
+    --border-strong: #c8c4be;
+    --red: #c3002f;
+    --red-dark: #8f0020;
+    --red-mid: #e8001a;
+    --red-light: #fdf0f3;
+    --red-pale: #fef8f9;
+    --text: #1a1a1a;
+    --text-muted: #706b66;
+    --text-dim: #b5b0aa;
+    --apertura: #1a6640;
+    --apertura-bg: #eef7f2;
+    --apertura-border: #9ecfb5;
+    --dia: #1a4a7a;
+    --dia-bg: #eef3f9;
+    --dia-border: #9ec0e0;
+    --cierre: #5a1a6e;
+    --cierre-bg: #f5eef9;
+    --cierre-border: #c09ed0;
+    --done: #1a6640;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ── KANJI WATERMARK ── */
+  #kanjiBg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  #kanjiBg span {
+    position: absolute;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 900;
+    color: var(--red);
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #fff;
+    border-bottom: 3px solid var(--red);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(195,0,47,0.10);
+  }
+  .header-stripe {
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--red) 0px,
+      var(--red) 32px,
+      #fff 32px,
+      #fff 40px
+    );
+    opacity: 0.15;
+  }
+  .header-body {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px 16px;
+    gap: 14px;
+  }
+  .header-redbar {
+    width: 4px;
+    height: 44px;
+    background: var(--red);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .header-info { flex: 1; }
+  .brand-kyoto {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: var(--text);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .brand-nissan {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  /* Nissan logo mark */
+  .nissan-logo {
+    flex-shrink: 0;
+  }
+  .header-omotenashi {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--red);
+    opacity: 0.18;
+    letter-spacing: 2px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* ── DATE BAR ── */
+  .date-bar {
+    text-align: center;
+    padding: 10px 16px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── TURNO BANNER ── */
+  .turno-banner {
+    margin: 18px 16px 0;
+    border-radius: 10px;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .turno-banner.apertura  { background: var(--apertura-bg);  border: 1px solid var(--apertura-border);  border-left: 4px solid var(--apertura); }
+  .turno-banner.dia       { background: var(--dia-bg);       border: 1px solid var(--dia-border);       border-left: 4px solid var(--dia); }
+  .turno-banner.cierre    { background: var(--cierre-bg);    border: 1px solid var(--cierre-border);    border-left: 4px solid var(--cierre); }
+  .turno-banner.completo  { background: var(--apertura-bg);  border: 1px solid var(--apertura-border);  border-left: 4px solid var(--done); }
+  .turno-icon { font-size: 26px; }
+  .turno-info { flex: 1; }
+  .turno-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .turno-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .turno-banner.apertura .turno-name { color: var(--apertura); }
+  .turno-banner.dia      .turno-name { color: var(--dia); }
+  .turno-banner.cierre   .turno-name { color: var(--cierre); }
+  .turno-banner.completo .turno-name { color: var(--done); }
+  .turno-side {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+  }
+  .turno-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .turno-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--red);
+    opacity: 0.25;
+    line-height: 1;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-section {
+    padding: 14px 16px 0;
+    position: relative; z-index: 1;
+  }
+  .progress-track {
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--red-dark), var(--red-mid));
+    transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
+  }
+  .progress-labels { display: flex; gap: 4px; }
+  .progress-step {
+    flex: 1; text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 6px 4px; border-radius: 6px;
+    color: var(--text-dim); border: 1px solid transparent;
+  }
+  .progress-step.done   { color: var(--red); border-color: #e8aab8; background: var(--red-light); }
+  .progress-step.active { color: var(--text); border-color: var(--border-strong); background: var(--surface2); }
+
+  /* ── OMOTENASHI DIVIDER ── */
+  .omotenashi-bar {
+    margin: 18px 16px 0;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--red-light), #fff8f9, var(--red-light));
+    border: 1px solid #f0c0cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .omotenashi-bar::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--red);
+  }
+  .omotenashi-bar::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--red);
+  }
+  .omo-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+    opacity: 0.6;
+    letter-spacing: 5px;
+  }
+  .omo-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin: 14px 16px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative; z-index: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .section-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  /* ── SUCURSAL ── */
+  .sucursal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .sucursal-btn {
+    padding: 16px 12px;
+    border: none; background: transparent;
+    color: var(--text-muted);
+    cursor: pointer; text-align: center;
+    transition: all 0.18s;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sucursal-btn:nth-child(2n)  { border-right: none; }
+  .sucursal-btn:nth-child(3),
+  .sucursal-btn:nth-child(4)   { border-bottom: none; }
+  .sucursal-btn:hover          { background: var(--red-light); color: var(--red); }
+  .sucursal-btn.selected       { background: var(--red); color: #fff; }
+  .sucursal-btn .check-mark    { position: absolute; top: 8px; right: 10px; font-size: 11px; opacity: 0; transition: opacity 0.2s; }
+  .sucursal-btn.selected .check-mark { opacity: 1; }
+  .sucursal-city {
+    font-size: 15px; font-weight: 500;
+    font-family: 'Noto Serif JP', serif;
+    display: block; margin-top: 5px;
+    color: inherit; letter-spacing: 0;
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist-body { padding: 4px 0; }
+  .check-item {
+    display: flex; align-items: flex-start;
+    gap: 14px; padding: 13px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover  { background: var(--red-pale); }
+  .check-item:active { background: var(--red-light); }
+  .check-box {
+    width: 22px; height: 22px; min-width: 22px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border-strong);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; margin-top: 1px;
+  }
+  .check-item.checked .check-box { background: var(--red); border-color: var(--red); }
+  .check-box svg { opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+  .check-item.checked .check-box svg { opacity: 1; transform: scale(1); }
+  .check-label {
+    font-size: 14px; color: var(--text-muted);
+    line-height: 1.45; transition: color 0.2s; flex: 1;
+    font-weight: 300;
+  }
+  .check-item.checked .check-label { color: var(--text); font-weight: 400; }
+
+  /* ── OBSERVACIONES ── */
+  .obs-body { padding: 14px 18px; }
+  textarea {
+    width: 100%; min-height: 88px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px; font-weight: 300;
+    padding: 11px 13px; resize: vertical; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(195,0,47,0.08);
+  }
+  textarea::placeholder { color: var(--text-dim); }
+
+  /* ── SUBMIT ── */
+  .submit-zone {
+    padding: 18px 16px 0;
+    position: relative; z-index: 1;
+  }
+  .submit-btn {
+    width: 100%; padding: 17px;
+    border: none; border-radius: 8px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .submit-btn:disabled {
+    background: var(--border); color: var(--text-dim); cursor: not-allowed;
+  }
+  .submit-btn.apertura-btn,
+  .submit-btn.dia-btn,
+  .submit-btn.cierre-btn {
+    background: var(--red); color: #fff;
+    box-shadow: 0 4px 18px rgba(195,0,47,0.28);
+  }
+  .submit-btn:not(:disabled):hover {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(195,0,47,0.36);
+  }
+  .submit-btn:not(:disabled):active { transform: translateY(0); }
+  .submit-btn:not(:disabled)::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1a1a1a; color: #fff;
+    padding: 12px 22px; border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; letter-spacing: 1px; white-space: nowrap;
+    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999; border-left: 4px solid var(--red);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { border-left-color: #e05050; }
+
+  /* ── ALL DONE ── */
+  .all-done {
+    text-align: center; padding: 44px 24px;
+    position: relative; z-index: 1;
+  }
+  .all-done-icon { font-size: 52px; margin-bottom: 16px; }
+  .all-done-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--red); margin-bottom: 8px;
+  }
+  .all-done-sub {
+    font-size: 14px; color: var(--text-muted);
+    line-height: 1.6; font-weight: 300;
+  }
+  .all-done-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 64px; font-weight: 900;
+    color: var(--red); opacity: 0.07;
+    margin-top: 24px; letter-spacing: 12px;
+    display: block;
+  }
+
+  /* ── LOADING ── */
+  .loading {
+    text-align: center; padding: 60px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; color: var(--text-dim);
+    position: relative; z-index: 1;
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid var(--border); border-top-color: var(--red);
+    border-radius: 50%; margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- KANJI WATERMARK -->
+<div id="kanjiBg"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-stripe"></div>
+  <div class="header-body">
+    <div class="header-redbar"></div>
+    <div class="header-info">
+      <div class="brand-kyoto">KYOTO</div>
+      <div class="brand-nissan">Nissan — Salón de Ventas</div>
+    </div>
+    <!-- Nissan emblem -->
+    <svg class="nissan-logo" width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="50" rx="47" ry="47" stroke="#c3002f" stroke-width="4.5" fill="white"/>
+      <ellipse cx="50" cy="50" rx="36" ry="36" stroke="#c3002f" stroke-width="2" fill="white"/>
+      <rect x="9" y="43" width="82" height="14" fill="#c3002f" rx="2"/>
+      <text x="50" y="39.5" text-anchor="middle" font-family="'Arial Black', 'Arial', sans-serif" font-size="11.5" font-weight="900" fill="white" letter-spacing="1.5">NISSAN</text>
+    </svg>
+    <div class="header-omotenashi">おもてなし</div>
+  </div>
+</header>
+
+<!-- LOADING -->
+<div id="loadingState" class="loading">
+  <div class="spinner"></div>
+  CARGANDO...
+</div>
+
+<!-- APP -->
+<div id="appState" class="hidden">
+
+  <div class="date-bar" id="dateBar"></div>
+
+  <div id="turnoBanner" class="turno-banner"></div>
+
+  <div class="progress-section">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-labels">
+      <div class="progress-step" id="stepApertura">🔓 Apertura</div>
+      <div class="progress-step" id="stepDia">🕘 Día</div>
+      <div class="progress-step" id="stepCierre">🔒 Cierre</div>
+    </div>
+  </div>
+
+  <div class="omotenashi-bar">
+    <span class="omo-kanji">お　も　て　な　し</span>
+    <span class="omo-label">Excelencia en el servicio</span>
+  </div>
+
+  <!-- ESTADO: todo completo o turno ya hecho -->
+  <div id="allDoneState" class="hidden">
+    <div class="all-done">
+      <div class="all-done-icon">✅</div>
+      <div class="all-done-title">¡Todo Registrado!</div>
+      <div class="all-done-sub">Los tres turnos del día fueron completados.<br>Excelente trabajo.</div>
+      <span class="all-done-kanji">完了</span>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div id="formState">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">📍 &nbsp;Sucursal</div>
+      </div>
+      <div class="sucursal-grid">
+        <button class="sucursal-btn" data-sucursal="KYOTO RESISTENCIA" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>
+          KYOTO<span class="sucursal-city">Resistencia</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO CORRIENTES" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>
+          KYOTO<span class="sucursal-city">Corrientes</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO POSADAS" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>
+          KYOTO<span class="sucursal-city">Posadas</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO SAENZ PEÑA" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>
+          KYOTO<span class="sucursal-city">Sáenz Peña</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title" id="checklistTitle"></div>
+      </div>
+      <div class="checklist-body" id="checklistBody"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">💬 &nbsp;Observaciones</div>
+      </div>
+      <div class="obs-body">
+        <textarea id="obsText" placeholder="Novedades, incidencias o comentarios del turno..."></textarea>
+      </div>
+    </div>
+
+    <div class="submit-zone">
+      <button class="submit-btn" id="submitBtn" onclick="enviarTurno()" disabled>
+        Guardar Turno
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// REEMPLAZÁ ESTA URL POR LA DE TU WEB APP DE APPS SCRIPT
+// ============================================================
+const SCRIPT_URL = 'PEGAR_ACA_LA_URL_DE_TU_WEB_APP';
+// ============================================================
+
+// ── KANJI BACKGROUND ──
+(function() {
+  const words = [
+    'おもてなし','日産','歓迎','丁寧','感謝','誠実','品質','信頼',
+    '革新','技術','安全','快適','優雅','完璧','誇り','一番',
+    'お客様','サービス','心','礼儀','繁栄','輝き','未来','共に',
+    '清潔','整頓','笑顔','挨拶','感動','卓越'
+  ];
+  const bg = document.getElementById('kanjiBg');
+  const cols = Math.ceil(window.innerWidth / 120);
+  const rows = 18;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const span = document.createElement('span');
+      span.textContent = words[Math.floor(Math.random() * words.length)];
+      const size = 22 + Math.random() * 60;
+      const rot  = -20 + Math.random() * 40;
+      const op   = 0.015 + Math.random() * 0.025;
+      span.style.cssText = `
+        font-size:${size}px;
+        left:${(c / cols * 100) + (Math.random() * 8 - 4)}vw;
+        top:${(r / rows * 280) + (Math.random() * 5)}vh;
+        transform:rotate(${rot}deg);
+        opacity:${op};
+      `;
+      bg.appendChild(span);
+    }
+  }
+})();
+
+// ── TURNOS ──
+const TURNOS = {
+  apertura: {
+    nombre:'Apertura', icon:'🔓', clase:'apertura', btnClase:'apertura-btn', kanji:'開始',
+    items:[
+      'Limpieza general (pisos, vidrios, escritorios)',
+      'Autos exhibidos en condiciones óptimas (limpieza interior y exterior, QR visible, ficha técnica, patente visible, cinturones y apoyacabezas, perchas colocadas, guantera vacía)',
+      'Autos correctamente ubicados',
+      'Material comercial disponible',
+      'Pantallas / TVs funcionando',
+      'Iluminación correcta',
+      'Recepción ordenada'
+    ]
+  },
+  dia: {
+    nombre:'Durante el día', icon:'🕘', clase:'dia', btnClase:'dia-btn', kanji:'日中',
+    items:[
+      'Vendedores presentables (imagen)',
+      'Escritorios ordenados',
+      'Clientes atendidos sin demora',
+      'Seguimiento activo en salón',
+      'Música / ambiente adecuado',
+      'Baños limpios'
+    ]
+  },
+  cierre: {
+    nombre:'Cierre', icon:'🔒', clase:'cierre', btnClase:'cierre-btn', kanji:'閉店',
+    items:[
+      'Autos exhibidos en condiciones óptimas (limpieza interior y exterior, QR visible, ficha técnica, patente visible, cinturones y apoyacabezas, perchas colocadas, guantera vacía)',
+      'Salón ordenado',
+      'Equipos apagados',
+      'Documentación guardada',
+      'Incidencias registradas',
+      'Luces de baños apagadas'
+    ]
+  }
+};
+
+let state = {
+  sucursal: null, turnoActual: null,
+  completados: { apertura:false, dia:false, cierre:false },
+  checks: {}
+};
+
+function getTurnoActual() {
+  const h = new Date().getHours();
+  if (h >= 6  && h < 13) return 'apertura';
+  if (h >= 13 && h < 19) return 'dia';
+  if (h >= 19) return 'cierre';
+  return 'apertura';
+}
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function formatDate() {
+  const d = new Date();
+  const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  return `${dias[d.getDay()]} ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+}
+function loadLocalState() {
+  try {
+    const k = 'kyoto_' + getTodayKey();
+    const s = localStorage.getItem(k);
+    if (s) state.completados = JSON.parse(s).completados || state.completados;
+    Object.keys(localStorage).forEach(key => { if (key.startsWith('kyoto_') && key !== k) localStorage.removeItem(key); });
+  } catch(e) {}
+}
+function saveLocalState() {
+  try { localStorage.setItem('kyoto_' + getTodayKey(), JSON.stringify({ completados: state.completados })); } catch(e) {}
+}
+
+function initApp() {
+  loadLocalState();
+  state.turnoActual = getTurnoActual();
+  document.getElementById('dateBar').textContent = formatDate();
+  renderTurnoBanner();
+  renderProgress();
+  const all = state.completados.apertura && state.completados.dia && state.completados.cierre;
+  if (all) {
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
+  } else {
+    renderChecklist();
+    renderSubmitBtn();
+  }
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('appState').classList.remove('hidden');
+}
+
+function renderTurnoBanner() {
+  const t = TURNOS[state.turnoActual];
+  const banner = document.getElementById('turnoBanner');
+  const yaHecho = state.completados[state.turnoActual];
+  if (yaHecho) {
+    banner.className = 'turno-banner completo';
+    banner.innerHTML = `
+      <div class="turno-icon">✅</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno completado</div>
+        <div class="turno-name">Esperando próximo turno</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">次へ</div>
+      </div>`;
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
+    const all = state.completados.apertura && state.completados.dia && state.completados.cierre;
+    if (!all) {
+      const next = state.turnoActual === 'apertura' ? 'Durante el día (desde las 13hs)' : 'Cierre (desde las 19hs)';
+      document.getElementById('allDoneState').querySelector('.all-done-title').textContent = 'Turno Guardado ✓';
+      document.getElementById('allDoneState').querySelector('.all-done-icon').textContent = '⏳';
+      document.getElementById('allDoneState').querySelector('.all-done-sub').textContent = `Volvé para completar:\n${next}`;
+      document.getElementById('allDoneState').querySelector('.all-done-kanji').textContent = '次へ';
+    }
+  } else {
+    banner.className = `turno-banner ${t.clase}`;
+    banner.innerHTML = `
+      <div class="turno-icon">${t.icon}</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno actual</div>
+        <div class="turno-name">${t.nombre}</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">${t.kanji}</div>
+      </div>`;
+  }
+}
+
+function renderProgress() {
+  const keys = ['apertura','dia','cierre'];
+  const ids  = ['stepApertura','stepDia','stepCierre'];
+  const lbls = ['🔓 Apertura','🕘 Día','🔒 Cierre'];
+  let done = 0;
+  keys.forEach((k,i) => {
+    const el = document.getElementById(ids[i]);
+    if (state.completados[k]) { el.className = 'progress-step done'; done++; }
+    else if (k === state.turnoActual) el.className = 'progress-step active';
+    else el.className = 'progress-step';
+    el.textContent = lbls[i];
+  });
+  document.getElementById('progressFill').style.width = `${(done/3)*100}%`;
+}
+
+function renderChecklist() {
+  const t = TURNOS[state.turnoActual];
+  document.getElementById('checklistTitle').textContent = `${t.icon}  ${t.nombre} — Items`;
+  const body = document.getElementById('checklistBody');
+  body.innerHTML = '';
+  state.checks = {};
+  t.items.forEach((item, idx) => {
+    state.checks[idx] = false;
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `
+      <div class="check-box">
+        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5L4.5 8.5L11 1.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="check-label">${item}</div>`;
+    div.addEventListener('click', () => toggleCheck(div, idx));
+    body.appendChild(div);
+  });
+}
+
+function toggleCheck(el, idx) {
+  state.checks[idx] = !state.checks[idx];
+  el.classList.toggle('checked', state.checks[idx]);
+  updateSubmitBtn();
+}
+function selectSucursal(btn) {
+  document.querySelectorAll('.sucursal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.sucursal = btn.dataset.sucursal;
+  updateSubmitBtn();
+}
+function updateSubmitBtn() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = !(state.sucursal && Object.values(state.checks).every(v => v));
+}
+function renderSubmitBtn() {
+  const btn = document.getElementById('submitBtn');
+  const t = TURNOS[state.turnoActual];
+  btn.className = `submit-btn ${t.btnClase}`;
+  btn.textContent = `Guardar ${t.nombre}`;
+  btn.disabled = true;
+}
+
+async function enviarTurno() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  const turnoInfo = TURNOS[state.turnoActual];
+  const items = turnoInfo.items.map((label, idx) => ({ item: label, ok: state.checks[idx] }));
+  const payload = {
+    accion: 'guardarTurno',
+    fecha: getTodayKey(),
+    sucursal: state.sucursal,
+    turno: state.turnoActual,
+    turnoNombre: turnoInfo.nombre,
+    hora: new Date().toLocaleTimeString('es-AR'),
+    items: JSON.stringify(items),
+    observaciones: document.getElementById('obsText').value.trim()
+  };
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (result.ok) {
+      state.completados[state.turnoActual] = true;
+      saveLocalState();
+      showToast('✓ Turno guardado correctamente');
+      setTimeout(() => { renderTurnoBanner(); renderProgress(); }, 1200);
+    } else throw new Error(result.error);
+  } catch(e) {
+    showToast('✗ Error al guardar. Verificá la conexión.', true);
+    btn.disabled = false; renderSubmitBtn();
+  }
+}
+
+function showToast(msg, error=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = error ? 'toast error' : 'toast';
+  setTimeout(() => t.classList.add('show'), 50);
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+window.addEventListener('load', initApp);
+</script>
+</body>
+</html>
