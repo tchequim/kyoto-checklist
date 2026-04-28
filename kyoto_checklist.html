@@ -484,18 +484,15 @@ function renderSubmitBtn() {
 
 function buildItems(area) {
   return AREAS[area][state.turnoActual].map((label, idx) => ({
-    item: label,
-    ok: state[area].sinoState[idx] === 'SI',
-    respuesta: state[area].sinoState[idx] || 'Sin responder',
-    porque: state[area].porques[idx] || ''
+    item:      label,
+    ok:        state[area].sinoState[idx] !== 'NO',
+    respuesta: state[area].sinoState[idx] || 'SI',
+    porque:    state[area].porques[idx]   || ''
   }));
 }
 
 function buildObs(area, obsId) {
-  const items = buildItems(area);
-  const nos = items.filter(i => i.respuesta === 'NO' && i.porque).map(i => `(${i.item}): ${i.porque}`).join(' | ');
-  const manual = document.getElementById(obsId).value.trim();
-  return [nos, manual].filter(Boolean).join(' | ');
+  return document.getElementById(obsId).value.trim();
 }
 
 async function enviarTurno() {
