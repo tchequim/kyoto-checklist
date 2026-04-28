@@ -502,16 +502,29 @@ async function enviarTurno() {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = 'Guardando...';
   const t = TURNO_CONFIG[state.turnoActual];
-  const base = { accion:'guardarTurno', fecha:getTodayKey(), hora:new Date().toLocaleTimeString('es-AR'), sucursal:state.sucursal, turno:state.turnoActual, turnoNombre:t.nombre };
 
-  const pVentas   = { ...base, area:'Ventas',   items:JSON.stringify(buildItems('ventas')),   observaciones:buildObs('ventas','obsVentas') };
-  const pPosventa = { ...base, area:'Posventa', items:JSON.stringify(buildItems('posventa')), observaciones:buildObs('posventa','obsPosventa') };
+  const payload = {
+    accion: 'guardarTurno',
+    fecha: getTodayKey(),
+    hora: new Date().toLocaleTimeString('es-AR'),
+    sucursal: state.sucursal,
+    turno: state.turnoActual,
+    turnoNombre: t.nombre,
+    itemsVentas:    JSON.stringify(buildItems('ventas')),
+    obsVentas:      buildObs('ventas', 'obsVentas'),
+    itemsPosventa:  JSON.stringify(buildItems('posventa')),
+    obsPosventa:    buildObs('posventa', 'obsPosventa')
+  };
 
   try {
-    const opts = body => ({ method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body), redirect:'follow' });
-    const [r1, r2] = await Promise.all([fetch(SCRIPT_URL, opts(pVentas)), fetch(SCRIPT_URL, opts(pPosventa))]);
-    const [j1, j2] = await Promise.all([r1.json(), r2.json()]);
-    if (j1.ok && j2.ok) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    });
+    const result = await res.json();
+    if (result.ok) {
       state.completados[state.turnoActual] = true;
       saveLocalState();
       showToast('✓ Turno guardado correctamente');
