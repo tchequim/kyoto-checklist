@@ -335,23 +335,25 @@ let state = {
     }
   }
 })();
-
 function getTurnoActual() {
-  const h = new Date().getHours();
-  if (h >= 6  && h < 13) return 'apertura';
-  if (h >= 13 && h < 19) return 'dia';
-  return 'cierre';
+  const now = new Date();
+  const min = now.getHours() * 60 + now.getMinutes();
+  const h   = now.getHours();
+  const day = getDayType();
+
+  if (day === 'semana') {
+    if (h >= 6  && h < 13) return 'apertura';
+    if (h >= 13 && h < 19) return 'dia';
+    return 'cierre';
+  }
+  if (day === 'sabado') {
+    if (min >= 8*60+30  && min < 11*60+30) return 'apertura';
+    if (min >= 11*60+30 && min < 12*60+30) return 'cierre';
+    return null;
+  }
+  return null; // domingo
 }
-function getTodayKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function formatDate() {
-  const d = new Date();
-  const dias  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  return `${dias[d.getDay()]} ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
-}
+
 function loadLocalState() {
   try {
     const k = 'kyoto_' + getTodayKey();
@@ -364,47 +366,48 @@ function saveLocalState() {
   try { localStorage.setItem('kyoto_' + getTodayKey(), JSON.stringify({ completados: state.completados })); } catch(e) {}
 }
 
-function initApp() {
-  loadLocalState();
-  state.turnoActual = getTurnoActual();
-  document.getElementById('dateBar').textContent = formatDate();
-  renderTurnoBanner();
-  renderProgress();
-  const all = state.completados.apertura && state.completados.dia && state.completados.cierre;
-  if (all) {
-    document.getElementById('formState').classList.add('hidden');
-    document.getElementById('allDoneState').classList.remove('hidden');
-  } else {
-    renderChecklists();
-    renderSubmitBtn();
+function getTurnoActual() {
+  const now = new Date();
+  const min = now.getHours() * 60 + now.getMinutes();
+  const h   = now.getHours();
+  const day = getDayType();
+
+  if (day === 'semana') {
+    if (h >= 6  && h < 13) return 'apertura';
+    if (h >= 13 && h < 19) return 'dia';
+    return 'cierre';
   }
-  document.getElementById('loadingState').classList.add('hidden');
-  document.getElementById('appState').classList.remove('hidden');
+  if (day === 'sabado') {
+    if (min >= 8*60+30  && min < 11*60+30) return 'apertura';
+    if (min >= 11*60+30 && min < 12*60+30) return 'cierre';
+    return null;
+  }
+  return null; // domingo
+}
+// ── NUEVA: tipo de día ──
+function getDayType() {
+  const day = new Date().getDay();
+  if (day === 0) return 'domingo';
+  if (day === 6) return 'sabado';
+  return 'semana';
 }
 
-function renderTurnoBanner() {
-  const t = TURNO_CONFIG[state.turnoActual];
-  const banner = document.getElementById('turnoBanner');
-  const yaHecho = state.completados[state.turnoActual];
-  if (yaHecho) {
-    banner.className = 'turno-banner completo';
-    banner.innerHTML = `<div class="turno-icon">✅</div><div class="turno-info"><div class="turno-label">Turno completado</div><div class="turno-name">Esperando próximo turno</div></div><div class="turno-side"><div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div><div class="turno-kanji">次へ</div></div>`;
-    document.getElementById('formState').classList.add('hidden');
-    document.getElementById('allDoneState').classList.remove('hidden');
-    const all = state.completados.apertura && state.completados.dia && state.completados.cierre;
-    if (!all) {
-      const next = state.turnoActual === 'apertura' ? 'Durante el día (desde las 13hs)' : 'Cierre (desde las 19hs)';
-      document.getElementById('allDoneState').querySelector('.all-done-title').textContent = 'Turno Guardado ✓';
-      document.getElementById('allDoneState').querySelector('.all-done-icon').textContent = '⏳';
-      document.getElementById('allDoneState').querySelector('.all-done-sub').textContent = `Volvé para completar: ${next}`;
-      document.getElementById('allDoneState').querySelector('.all-done-kanji').textContent = '次へ';
-    }
-  } else {
-    banner.className = `turno-banner ${t.clase}`;
-    banner.innerHTML = `<div class="turno-icon">${t.icon}</div><div class="turno-info"><div class="turno-label">Turno actual</div><div class="turno-name">${t.nombre}</div></div><div class="turno-side"><div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div><div class="turno-kanji">${t.kanji}</div></div>`;
-  }
+// ── NUEVA: todo completado (varía según día) ──
+function isAllDone() {
+  if (getDayType() === 'sabado') return state.completados.apertura && state.completados.cierre;
+  return state.completados.apertura && state.completados.dia && state.completados.cierre;
 }
 
+// ── NUEVA: mostrar mensaje de cerrado ──
+function showMensajeCerrado(icon, titulo, sub, kanji) {
+  document.getElementById('formState').classList.add('hidden');
+  const d = document.getElementById('allDoneState');
+  d.classList.remove('hidden');
+  d.querySelector('.all-done-icon').textContent  = icon;
+  d.querySelector('.all-done-title').textContent = titulo;
+  d.querySelector('.all-done-sub').textContent   = sub;
+  d.querySelector('.all-done-kanji').textContent = kanji;
+}
 function renderProgress() {
   const keys = ['apertura','dia','cierre'];
   const ids  = ['stepApertura','stepDia','stepCierre'];
@@ -419,7 +422,27 @@ function renderProgress() {
   });
   document.getElementById('progressFill').style.width = `${(done/3)*100}%`;
 }
+function renderProgress() {
+  const dayType  = getDayType();
+  const isSabado = dayType === 'sabado';
 
+  document.getElementById('stepDia').style.display = isSabado ? 'none' : '';
+
+  const keys = isSabado ? ['apertura','cierre']       : ['apertura','dia','cierre'];
+  const ids  = isSabado ? ['stepApertura','stepCierre'] : ['stepApertura','stepDia','stepCierre'];
+  const lbls = isSabado ? ['🔓 Apertura','🔒 Cierre']  : ['🔓 Apertura','🕘 Día','🔒 Cierre'];
+
+  let done = 0;
+  keys.forEach((k, i) => {
+    const el = document.getElementById(ids[i]);
+    if (state.completados[k])       { el.className = 'progress-step done'; done++; }
+    else if (k === state.turnoActual) el.className = 'progress-step active';
+    else                              el.className = 'progress-step';
+    el.textContent = lbls[i];
+  });
+
+  document.getElementById('progressFill').style.width = `${(done / keys.length) * 100}%`;
+}
 function renderChecklists() {
   const t = TURNO_CONFIG[state.turnoActual];
   const turno = state.turnoActual;
