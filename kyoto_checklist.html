@@ -59,12 +59,12 @@
   .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--red-dark), var(--red-mid)); transition: width 0.6s cubic-bezier(.34,1.56,.64,1); }
   .progress-labels { display: flex; gap: 4px; }
   .progress-step { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 6px 4px; border-radius: 6px; color: var(--text-dim); border: 1px solid transparent; }
-  .progress-step.done  { color: #1a6640; border-color: #9ecfb5; background: #eef7f2; }
+  .progress-step.done   { color: #1a6640; border-color: #9ecfb5; background: #eef7f2; }
   .progress-step.active { color: #fff; border-color: var(--red); background: var(--red); }
 
   .omotenashi-bar { margin: 18px 16px 0; height: 36px; border-radius: 8px; background: linear-gradient(90deg, var(--red-light), #fff8f9, var(--red-light)); border: 1px solid #f0c0cc; display: flex; align-items: center; justify-content: center; gap: 12px; position: relative; z-index: 1; overflow: hidden; }
   .omotenashi-bar::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
-  .omotenashi-bar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
+  .omotenashi-bar::after  { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
   .omo-kanji { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; color: var(--red); opacity: 0.6; letter-spacing: 5px; }
   .omo-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
 
@@ -73,20 +73,20 @@
   .section-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); font-weight: 500; }
 
   .area-header { margin: 22px 16px 0; border-radius: 10px; padding: 13px 18px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
-  .area-header.ventas { background: var(--ventas-bg); border: 1px solid var(--ventas-border); border-left: 4px solid var(--ventas); }
+  .area-header.ventas   { background: var(--ventas-bg);   border: 1px solid var(--ventas-border);   border-left: 4px solid var(--ventas); }
   .area-header.posventa { background: var(--posventa-bg); border: 1px solid var(--posventa-border); border-left: 4px solid var(--posventa); }
   .area-icon { font-size: 24px; }
   .area-info { flex: 1; }
   .area-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
   .area-name { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; margin-top: 2px; }
-  .area-header.ventas .area-name { color: var(--ventas); }
+  .area-header.ventas   .area-name { color: var(--ventas); }
   .area-header.posventa .area-name { color: var(--posventa); }
 
   .sucursal-grid { display: grid; grid-template-columns: 1fr 1fr; }
   .sucursal-btn { padding: 16px 12px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; text-align: center; transition: all 0.18s; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; position: relative; -webkit-tap-highlight-color: transparent; }
   .sucursal-btn:nth-child(2n) { border-right: none; }
   .sucursal-btn:nth-child(3), .sucursal-btn:nth-child(4) { border-bottom: none; }
-  .sucursal-btn:hover { background: var(--red-light); color: var(--red); }
+  .sucursal-btn:hover    { background: var(--red-light); color: var(--red); }
   .sucursal-btn.selected { background: var(--red); color: #fff; }
   .sucursal-btn .check-mark { position: absolute; top: 8px; right: 10px; font-size: 11px; opacity: 0; transition: opacity 0.2s; }
   .sucursal-btn.selected .check-mark { opacity: 1; }
@@ -98,7 +98,7 @@
   .sino-btns { display: flex; gap: 8px; }
   .sino-btn { flex: 1; padding: 9px 8px; border: 1.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 2px; cursor: pointer; transition: all 0.18s; color: var(--text-muted); -webkit-tap-highlight-color: transparent; }
   .sino-btn.si.active { background: #1a6640; border-color: #1a6640; color: #fff; }
-  .sino-btn.no.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .sino-btn.no.active { background: var(--red);  border-color: var(--red);  color: #fff; }
   .sino-porque { margin-top: 10px; }
   .sino-porque input { width: 100%; background: var(--surface2); border: 1.5px solid var(--red); border-radius: 6px; color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 13px; padding: 9px 12px; outline: none; transition: box-shadow 0.2s; }
   .sino-porque input:focus { box-shadow: 0 0 0 3px rgba(195,0,47,0.10); }
@@ -113,18 +113,18 @@
   .submit-btn { width: 100%; padding: 17px; border: none; border-radius: 8px; font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
   .submit-btn:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
   .submit-btn.apertura-btn, .submit-btn.dia-btn, .submit-btn.cierre-btn { background: var(--red); color: #fff; box-shadow: 0 4px 18px rgba(195,0,47,0.28); }
-  .submit-btn:not(:disabled):hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(195,0,47,0.36); }
+  .submit-btn:not(:disabled):hover  { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(195,0,47,0.36); }
   .submit-btn:not(:disabled):active { transform: translateY(0); }
   .submit-btn:not(:disabled)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, transparent 50%); pointer-events: none; }
 
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; white-space: nowrap; transition: transform 0.4s cubic-bezier(.34,1.56,.64,1); z-index: 999; border-left: 4px solid var(--red); box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.show  { transform: translateX(-50%) translateY(0); }
   .toast.error { border-left-color: #e05050; }
 
   .all-done { text-align: center; padding: 44px 24px; position: relative; z-index: 1; }
-  .all-done-icon { font-size: 52px; margin-bottom: 16px; }
+  .all-done-icon  { font-size: 52px; margin-bottom: 16px; }
   .all-done-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
-  .all-done-sub { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+  .all-done-sub   { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
   .all-done-kanji { font-family: 'Noto Serif JP', serif; font-size: 64px; font-weight: 900; color: var(--red); opacity: 0.07; margin-top: 24px; letter-spacing: 12px; display: block; }
 
   .loading { text-align: center; padding: 60px 20px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--text-dim); position: relative; z-index: 1; }
@@ -187,8 +187,6 @@
   </div>
 
   <div id="formState">
-
-    <!-- SUCURSAL -->
     <div class="section">
       <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
       <div class="sucursal-grid">
@@ -207,7 +205,6 @@
       </div>
     </div>
 
-    <!-- ÁREA VENTAS -->
     <div class="area-header ventas">
       <div class="area-icon">🚗</div>
       <div class="area-info">
@@ -215,7 +212,6 @@
         <div class="area-name">Ventas</div>
       </div>
     </div>
-
     <div class="section">
       <div class="section-header"><div class="section-title" id="tituloVentas"></div></div>
       <div id="listadoVentas"></div>
@@ -225,7 +221,6 @@
       <div class="obs-body"><textarea id="obsVentas" placeholder="Novedades o comentarios del área de Ventas..."></textarea></div>
     </div>
 
-    <!-- ÁREA POSVENTA -->
     <div class="area-header posventa">
       <div class="area-icon">🔧</div>
       <div class="area-info">
@@ -233,7 +228,6 @@
         <div class="area-name">Posventa</div>
       </div>
     </div>
-
     <div class="section">
       <div class="section-header"><div class="section-title" id="tituloPosventa"></div></div>
       <div id="listadoPosventa"></div>
@@ -246,7 +240,6 @@
     <div class="submit-zone">
       <button class="submit-btn" id="submitBtn" onclick="enviarTurno()" disabled>Guardar Turno</button>
     </div>
-
   </div>
 </div>
 
@@ -256,9 +249,9 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZ60tb8xFXkYE3cq2dOBT15Jh3t_RI2la1YJ6ssu59tyqr7GJ6yAnJ3nYB5g03TKae/exec';
 
 const TURNO_CONFIG = {
-  apertura: { nombre:'Apertura',      icon:'🔓', clase:'apertura', btnClase:'apertura-btn', kanji:'開始' },
+  apertura: { nombre:'Apertura',       icon:'🔓', clase:'apertura', btnClase:'apertura-btn', kanji:'開始' },
   dia:      { nombre:'Durante el día', icon:'🕘', clase:'dia',      btnClase:'dia-btn',      kanji:'日中' },
-  cierre:   { nombre:'Cierre',        icon:'🔒', clase:'cierre',   btnClase:'cierre-btn',   kanji:'閉店' }
+  cierre:   { nombre:'Cierre',         icon:'🔒', clase:'cierre',   btnClase:'cierre-btn',   kanji:'閉店' }
 };
 
 const AREAS = {
@@ -321,10 +314,10 @@ let state = {
   posventa: { sinoState: {}, porques: {} }
 };
 
-// KANJI BG
+// ── KANJI BG ──
 (function() {
   const words = ['おもてなし','日産','歓迎','丁寧','感謝','誠実','品質','信頼','革新','技術','安全','快適','優雅','完璧','誇り','一番','お客様','サービス','心','礼儀','繁栄','輝き','未来','共に','清潔','整頓','笑顔','挨拶','感動','卓越'];
-  const bg = document.getElementById('kanjiBg');
+  const bg   = document.getElementById('kanjiBg');
   const cols = Math.ceil(window.innerWidth / 120);
   for (let r = 0; r < 18; r++) {
     for (let c = 0; c < cols; c++) {
@@ -335,12 +328,31 @@ let state = {
     }
   }
 })();
+
+// ── UTILIDADES DE FECHA ──
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function formatDate() {
+  const d     = new Date();
+  const dias  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  return `${dias[d.getDay()]} ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+}
+
+// ── TIPO DE DÍA Y TURNO ──
+function getDayType() {
+  const day = new Date().getDay();
+  if (day === 0) return 'domingo';
+  if (day === 6) return 'sabado';
+  return 'semana';
+}
 function getTurnoActual() {
   const now = new Date();
   const min = now.getHours() * 60 + now.getMinutes();
   const h   = now.getHours();
   const day = getDayType();
-
   if (day === 'semana') {
     if (h >= 6  && h < 13) return 'apertura';
     if (h >= 13 && h < 19) return 'dia';
@@ -351,9 +363,14 @@ function getTurnoActual() {
     if (min >= 11*60+30 && min < 12*60+30) return 'cierre';
     return null;
   }
-  return null; // domingo
+  return null;
+}
+function isAllDone() {
+  if (getDayType() === 'sabado') return state.completados.apertura && state.completados.cierre;
+  return state.completados.apertura && state.completados.dia && state.completados.cierre;
 }
 
+// ── LOCAL STORAGE ──
 function loadLocalState() {
   try {
     const k = 'kyoto_' + getTodayKey();
@@ -366,39 +383,7 @@ function saveLocalState() {
   try { localStorage.setItem('kyoto_' + getTodayKey(), JSON.stringify({ completados: state.completados })); } catch(e) {}
 }
 
-function getTurnoActual() {
-  const now = new Date();
-  const min = now.getHours() * 60 + now.getMinutes();
-  const h   = now.getHours();
-  const day = getDayType();
-
-  if (day === 'semana') {
-    if (h >= 6  && h < 13) return 'apertura';
-    if (h >= 13 && h < 19) return 'dia';
-    return 'cierre';
-  }
-  if (day === 'sabado') {
-    if (min >= 8*60+30  && min < 11*60+30) return 'apertura';
-    if (min >= 11*60+30 && min < 12*60+30) return 'cierre';
-    return null;
-  }
-  return null; // domingo
-}
-// ── NUEVA: tipo de día ──
-function getDayType() {
-  const day = new Date().getDay();
-  if (day === 0) return 'domingo';
-  if (day === 6) return 'sabado';
-  return 'semana';
-}
-
-// ── NUEVA: todo completado (varía según día) ──
-function isAllDone() {
-  if (getDayType() === 'sabado') return state.completados.apertura && state.completados.cierre;
-  return state.completados.apertura && state.completados.dia && state.completados.cierre;
-}
-
-// ── NUEVA: mostrar mensaje de cerrado ──
+// ── MENSAJE CERRADO ──
 function showMensajeCerrado(icon, titulo, sub, kanji) {
   document.getElementById('formState').classList.add('hidden');
   const d = document.getElementById('allDoneState');
@@ -408,43 +393,118 @@ function showMensajeCerrado(icon, titulo, sub, kanji) {
   d.querySelector('.all-done-sub').textContent   = sub;
   d.querySelector('.all-done-kanji').textContent = kanji;
 }
-function renderProgress() {
-  const keys = ['apertura','dia','cierre'];
-  const ids  = ['stepApertura','stepDia','stepCierre'];
-  const lbls = ['🔓 Apertura','🕘 Día','🔒 Cierre'];
-  let done = 0;
-  keys.forEach((k,i) => {
-    const el = document.getElementById(ids[i]);
-    if (state.completados[k]) { el.className = 'progress-step done'; done++; }
-    else if (k === state.turnoActual) el.className = 'progress-step active';
-    else el.className = 'progress-step';
-    el.textContent = lbls[i];
-  });
-  document.getElementById('progressFill').style.width = `${(done/3)*100}%`;
-}
-function renderProgress() {
-  const dayType  = getDayType();
-  const isSabado = dayType === 'sabado';
 
+// ── INIT ──
+function initApp() {
+  loadLocalState();
+  const dayType = getDayType();
+  state.turnoActual = getTurnoActual();
+  document.getElementById('dateBar').textContent = formatDate();
+  renderProgress();
+
+  if (dayType === 'domingo') {
+    showMensajeCerrado('🌸', 'Domingo — Día de Descanso',
+      'Hoy no hay operaciones programadas.\nNos vemos el lunes.', '休日');
+
+  } else if (dayType === 'sabado' && state.turnoActual === null) {
+    const min = new Date().getHours() * 60 + new Date().getMinutes();
+    if (min < 8*60+30) {
+      showMensajeCerrado('⏰', 'Aún no es hora',
+        'La apertura del sábado comienza a las 8:30hs.', '待機');
+    } else {
+      showMensajeCerrado('✅', '¡Jornada Completa!',
+        'La jornada del sábado ha finalizado.\nExcelente trabajo.', '完了');
+    }
+
+  } else if (isAllDone()) {
+    renderTurnoBanner();
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
+
+  } else {
+    renderTurnoBanner();
+    renderChecklists();
+    renderSubmitBtn();
+  }
+
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('appState').classList.remove('hidden');
+}
+
+// ── RENDER TURNO BANNER ──
+function renderTurnoBanner() {
+  if (!state.turnoActual) return;
+  const t       = TURNO_CONFIG[state.turnoActual];
+  const banner  = document.getElementById('turnoBanner');
+  const yaHecho = state.completados[state.turnoActual];
+  const dayType = getDayType();
+
+  if (yaHecho) {
+    banner.className = 'turno-banner completo';
+    banner.innerHTML = `
+      <div class="turno-icon">✅</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno completado</div>
+        <div class="turno-name">Esperando próximo turno</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">次へ</div>
+      </div>`;
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
+
+    if (!isAllDone()) {
+      let next;
+      if (dayType === 'sabado') {
+        next = 'Cierre (desde las 11:30hs)';
+      } else {
+        next = state.turnoActual === 'apertura' ? 'Durante el día (desde las 13hs)' : 'Cierre (desde las 19hs)';
+      }
+      const d = document.getElementById('allDoneState');
+      d.querySelector('.all-done-title').textContent = 'Turno Guardado ✓';
+      d.querySelector('.all-done-icon').textContent  = '⏳';
+      d.querySelector('.all-done-sub').textContent   = `Volvé para completar: ${next}`;
+      d.querySelector('.all-done-kanji').textContent = '次へ';
+    }
+  } else {
+    banner.className = `turno-banner ${t.clase}`;
+    banner.innerHTML = `
+      <div class="turno-icon">${t.icon}</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno actual</div>
+        <div class="turno-name">${t.nombre}</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">${t.kanji}</div>
+      </div>`;
+  }
+}
+
+// ── RENDER PROGRESS ──
+function renderProgress() {
+  const isSabado = getDayType() === 'sabado';
   document.getElementById('stepDia').style.display = isSabado ? 'none' : '';
 
-  const keys = isSabado ? ['apertura','cierre']       : ['apertura','dia','cierre'];
-  const ids  = isSabado ? ['stepApertura','stepCierre'] : ['stepApertura','stepDia','stepCierre'];
-  const lbls = isSabado ? ['🔓 Apertura','🔒 Cierre']  : ['🔓 Apertura','🕘 Día','🔒 Cierre'];
+  const keys = isSabado ? ['apertura','cierre']          : ['apertura','dia','cierre'];
+  const ids  = isSabado ? ['stepApertura','stepCierre']  : ['stepApertura','stepDia','stepCierre'];
+  const lbls = isSabado ? ['🔓 Apertura','🔒 Cierre']    : ['🔓 Apertura','🕘 Día','🔒 Cierre'];
 
   let done = 0;
   keys.forEach((k, i) => {
     const el = document.getElementById(ids[i]);
-    if (state.completados[k])       { el.className = 'progress-step done'; done++; }
-    else if (k === state.turnoActual) el.className = 'progress-step active';
-    else                              el.className = 'progress-step';
+    if (state.completados[k])        { el.className = 'progress-step done'; done++; }
+    else if (k === state.turnoActual)  el.className = 'progress-step active';
+    else                               el.className = 'progress-step';
     el.textContent = lbls[i];
   });
-
   document.getElementById('progressFill').style.width = `${(done / keys.length) * 100}%`;
 }
+
+// ── RENDER CHECKLISTS ──
 function renderChecklists() {
-  const t = TURNO_CONFIG[state.turnoActual];
+  const t     = TURNO_CONFIG[state.turnoActual];
   const turno = state.turnoActual;
   state.ventas   = { sinoState: {}, porques: {} };
   state.posventa = { sinoState: {}, porques: {} };
@@ -499,10 +559,10 @@ function selectSucursal(btn) {
 
 function renderSubmitBtn() {
   const btn = document.getElementById('submitBtn');
-  const t = TURNO_CONFIG[state.turnoActual];
-  btn.className = `submit-btn ${t.btnClase}`;
+  const t   = TURNO_CONFIG[state.turnoActual];
+  btn.className   = `submit-btn ${t.btnClase}`;
   btn.textContent = `Guardar ${t.nombre}`;
-  btn.disabled = true;
+  btn.disabled    = true;
 }
 
 function buildItems(area) {
@@ -524,25 +584,20 @@ async function enviarTurno() {
   const t = TURNO_CONFIG[state.turnoActual];
 
   const payload = {
-    accion: 'guardarTurno',
-    fecha: getTodayKey(),
-    hora: new Date().toLocaleTimeString('es-AR'),
-    sucursal: state.sucursal,
-    turno: state.turnoActual,
-    turnoNombre: t.nombre,
-    itemsVentas:    JSON.stringify(buildItems('ventas')),
-    obsVentas:      buildObs('ventas', 'obsVentas'),
-    itemsPosventa:  JSON.stringify(buildItems('posventa')),
-    obsPosventa:    buildObs('posventa', 'obsPosventa')
+    accion:        'guardarTurno',
+    fecha:         getTodayKey(),
+    hora:          new Date().toLocaleTimeString('es-AR'),
+    sucursal:      state.sucursal,
+    turno:         state.turnoActual,
+    turnoNombre:   t.nombre,
+    itemsVentas:   JSON.stringify(buildItems('ventas')),
+    obsVentas:     buildObs('ventas',   'obsVentas'),
+    itemsPosventa: JSON.stringify(buildItems('posventa')),
+    obsPosventa:   buildObs('posventa', 'obsPosventa')
   };
 
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload),
-      redirect: 'follow'
-    });
+    const res    = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), redirect:'follow' });
     const result = await res.json();
     if (result.ok) {
       state.completados[state.turnoActual] = true;
