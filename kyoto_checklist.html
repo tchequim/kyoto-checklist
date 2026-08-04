@@ -1,351 +1,257 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KYOTO — Check List Diario</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --red:    #c3002f;
-      --red-dk: #9a0025;
-      --white:  #ffffff;
-      --off:    #f5f5f5;
-      --gray:   #888;
-      --border: #ddd;
-      --text:   #1a1a1a;
-      --shadow: 0 2px 12px rgba(0,0,0,.08);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Noto Sans JP', sans-serif;
-      background: var(--off);
-      color: var(--text);
-      min-height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYOTO Nissan — Check List Diario</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f7f5; --surface: #ffffff; --surface2: #f3f2f0;
+    --border: #e2deda; --border-strong: #c8c4be;
+    --red: #c3002f; --red-dark: #8f0020; --red-mid: #e8001a;
+    --red-light: #fdf0f3; --red-pale: #fef8f9;
+    --text: #1a1a1a; --text-muted: #706b66; --text-dim: #b5b0aa;
+    --apertura: #1a6640; --apertura-bg: #eef7f2; --apertura-border: #9ecfb5;
+    --dia: #1a4a7a; --dia-bg: #eef3f9; --dia-border: #9ec0e0;
+    --cierre: #5a1a6e; --cierre-bg: #f5eef9; --cierre-border: #c09ed0;
+    --done: #1a6640;
+    --ventas: #8B4513; --ventas-bg: #fdf5ef; --ventas-border: #d4956a;
+    --posventa: #1a4a7a; --posventa-bg: #eef3f9; --posventa-border: #9ec0e0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; padding: 0 0 80px; position: relative; overflow-x: hidden; }
 
-    /* HEADER */
-    .header {
-      background: var(--white);
-      border-bottom: 3px solid var(--red);
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: var(--shadow);
-    }
-    .header-left { display: flex; align-items: center; gap: 14px; }
-    .logo-nissan { width: 52px; height: 52px; }
-    .header-title h1 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--red);
-      letter-spacing: .05em;
-    }
-    .header-title p {
-      font-size: .7rem;
-      color: var(--gray);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-    .kanji {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.5rem;
-      color: var(--red);
-      opacity: .2;
-      letter-spacing: .1em;
-    }
+  #kanjiBg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  #kanjiBg span { position: absolute; font-family: 'Noto Serif JP', serif; font-weight: 900; color: var(--red); user-select: none; line-height: 1; }
 
-    /* CONTAINER */
-    .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
+  .header { background: #fff; border-bottom: 3px solid var(--red); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(195,0,47,0.10); }
+  .header-stripe { height: 4px; background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 32px, #fff 32px, #fff 40px); opacity: 0.15; }
+  .header-body { display: flex; align-items: center; padding: 14px 20px 16px; gap: 14px; }
+  .header-redbar { width: 4px; height: 44px; background: var(--red); border-radius: 2px; flex-shrink: 0; }
+  .header-info { flex: 1; }
+  .brand-kyoto { font-family: 'Noto Serif JP', serif; font-size: 24px; font-weight: 900; letter-spacing: 6px; color: var(--text); text-transform: uppercase; line-height: 1; }
+  .brand-nissan { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-top: 3px; }
+  .nissan-logo { flex-shrink: 0; }
+  .header-omotenashi { font-family: 'Noto Serif JP', serif; font-size: 26px; font-weight: 900; color: var(--red); opacity: 0.18; letter-spacing: 2px; line-height: 1; flex-shrink: 0; }
 
-    /* CARD */
-    .card {
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      padding: 22px;
-      margin-bottom: 18px;
-    }
-    .card-title {
-      font-family: 'Noto Serif JP', serif;
-      font-size: .75rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--gray);
-      margin-bottom: 14px;
-    }
+  .date-bar { text-align: center; padding: 10px 16px 0; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; position: relative; z-index: 1; }
 
-    /* SUCURSAL */
-    .sucursal-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media(max-width:480px){ .sucursal-grid { grid-template-columns: 1fr; } }
-    .sucursal-btn {
-      border: 2px solid var(--border);
-      background: var(--white);
-      border-radius: 8px;
-      padding: 11px 14px;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: .82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all .17s;
-      text-align: left;
-      color: var(--text);
-    }
-    .sucursal-btn:hover { border-color: var(--red); color: var(--red); }
-    .sucursal-btn.active { border-color: var(--red); background: var(--red); color: var(--white); }
+  .turno-banner { margin: 18px 16px 0; border-radius: 10px; padding: 15px 18px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+  .turno-banner.apertura { background: var(--apertura-bg); border: 1px solid var(--apertura-border); border-left: 4px solid var(--apertura); }
+  .turno-banner.dia { background: var(--dia-bg); border: 1px solid var(--dia-border); border-left: 4px solid var(--dia); }
+  .turno-banner.cierre { background: var(--cierre-bg); border: 1px solid var(--cierre-border); border-left: 4px solid var(--cierre); }
+  .turno-banner.completo { background: var(--apertura-bg); border: 1px solid var(--apertura-border); border-left: 4px solid var(--done); }
+  .turno-icon { font-size: 26px; }
+  .turno-info { flex: 1; }
+  .turno-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+  .turno-name { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .turno-banner.apertura .turno-name { color: var(--apertura); }
+  .turno-banner.dia .turno-name { color: var(--dia); }
+  .turno-banner.cierre .turno-name { color: var(--cierre); }
+  .turno-banner.completo .turno-name { color: var(--done); }
+  .turno-side { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+  .turno-time { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text-muted); }
+  .turno-kanji { font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 900; color: var(--red); opacity: 0.25; line-height: 1; }
 
-    /* PROGRESS */
-    .progress-bar { display: flex; gap: 8px; margin-bottom: 18px; }
-    .progress-step {
-      flex: 1;
-      text-align: center;
-      padding: 9px 4px;
-      border-radius: 8px;
-      border: 2px solid var(--border);
-      font-size: .72rem;
-      font-weight: 500;
-      color: var(--gray);
-      background: var(--white);
-      transition: all .2s;
-    }
-    .progress-step.done   { color: #1a6640; border-color: #9ecfb5; background: #eef7f2; }
-    .progress-step.active { color: #fff; border-color: var(--red); background: var(--red); }
+  .progress-section { padding: 14px 16px 0; position: relative; z-index: 1; }
+  .progress-track { background: var(--border); border-radius: 99px; height: 4px; overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--red-dark), var(--red-mid)); transition: width 0.6s cubic-bezier(.34,1.56,.64,1); }
+  .progress-labels { display: flex; gap: 4px; }
+  .progress-step { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 6px 4px; border-radius: 6px; color: var(--text-dim); border: 1px solid transparent; }
+  .progress-step.done   { color: #1a6640; border-color: #9ecfb5; background: #eef7f2; }
+  .progress-step.active { color: #fff; border-color: var(--red); background: var(--red); }
 
-    /* TURNO BANNER */
-    .turno-banner {
-      background: var(--red);
-      color: var(--white);
-      border-radius: 10px;
-      padding: 14px 20px;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .turno-banner h2 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: .98rem;
-      font-weight: 600;
-    }
-    .turno-banner .hora {
-      font-family: 'DM Mono', monospace;
-      font-size: .84rem;
-      opacity: .85;
-    }
+  .omotenashi-bar { margin: 18px 16px 0; height: 36px; border-radius: 8px; background: linear-gradient(90deg, var(--red-light), #fff8f9, var(--red-light)); border: 1px solid #f0c0cc; display: flex; align-items: center; justify-content: center; gap: 12px; position: relative; z-index: 1; overflow: hidden; }
+  .omotenashi-bar::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
+  .omotenashi-bar::after  { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
+  .omo-kanji { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; color: var(--red); opacity: 0.6; letter-spacing: 5px; }
+  .omo-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
 
-    /* AREA */
-    .area-section { margin-bottom: 18px; }
-    .area-header {
-      font-family: 'Noto Serif JP', serif;
-      font-size: .76rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--gray);
-      margin-bottom: 10px;
-      padding-left: 2px;
-    }
+  .section { margin: 14px 16px 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; position: relative; z-index: 1; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .section-header { padding: 12px 18px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .section-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); font-weight: 500; }
 
-    /* ITEM */
-    .item-card {
-      background: var(--white);
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-      padding: 13px 15px;
-      margin-bottom: 8px;
-    }
-    .item-row { display: flex; align-items: flex-start; gap: 12px; }
-    .item-label {
-      flex: 1;
-      font-size: .86rem;
-      line-height: 1.5;
-      padding-top: 5px;
-    }
-    .sino-btns { display: flex; gap: 6px; flex-shrink: 0; }
-    .sino-btn {
-      border: 2px solid var(--border);
-      background: var(--white);
-      border-radius: 6px;
-      padding: 5px 13px;
-      font-family: 'DM Mono', monospace;
-      font-size: .78rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all .14s;
-      color: var(--text);
-    }
-    .sino-btn.si:hover  { border-color: #1a6640; color: #1a6640; }
-    .sino-btn.no:hover  { border-color: var(--red); color: var(--red); }
-    .sino-btn.si.active { background: #1a6640; border-color: #1a6640; color: #fff; }
-    .sino-btn.no.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .area-header { margin: 22px 16px 0; border-radius: 10px; padding: 13px 18px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+  .area-header.ventas   { background: var(--ventas-bg);   border: 1px solid var(--ventas-border);   border-left: 4px solid var(--ventas); }
+  .area-header.posventa { background: var(--posventa-bg); border: 1px solid var(--posventa-border); border-left: 4px solid var(--posventa); }
+  .area-icon { font-size: 24px; }
+  .area-info { flex: 1; }
+  .area-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+  .area-name { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .area-header.ventas   .area-name { color: var(--ventas); }
+  .area-header.posventa .area-name { color: var(--posventa); }
 
-    .porque-field { margin-top: 10px; display: none; }
-    .porque-field.show { display: block; }
-    .porque-label { font-size: .73rem; color: var(--gray); margin-bottom: 5px; }
-    .porque-field textarea {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 10px;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: .82rem;
-      resize: vertical;
-      min-height: 58px;
-      color: var(--text);
-    }
-    .porque-field textarea:focus { outline: none; border-color: var(--red); }
+  .sucursal-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .sucursal-btn { padding: 16px 12px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; text-align: center; transition: all 0.18s; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; position: relative; -webkit-tap-highlight-color: transparent; }
+  .sucursal-btn:nth-child(2n) { border-right: none; }
+  .sucursal-btn:nth-child(3), .sucursal-btn:nth-child(4) { border-bottom: none; }
+  .sucursal-btn:hover    { background: var(--red-light); color: var(--red); }
+  .sucursal-btn.selected { background: var(--red); color: #fff; }
+  .sucursal-btn .check-mark { position: absolute; top: 8px; right: 10px; font-size: 11px; opacity: 0; transition: opacity 0.2s; }
+  .sucursal-btn.selected .check-mark { opacity: 1; }
+  .sucursal-city { font-size: 15px; font-weight: 500; font-family: 'Noto Serif JP', serif; display: block; margin-top: 5px; color: inherit; letter-spacing: 0; }
 
-    /* OBS */
-    .obs-card {
-      background: var(--white);
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-      padding: 13px 15px;
-      margin-top: 4px;
-    }
-    .obs-card label { font-size: .76rem; color: var(--gray); display: block; margin-bottom: 6px; }
-    .obs-card textarea {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 10px;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: .82rem;
-      resize: vertical;
-      min-height: 58px;
-      color: var(--text);
-    }
-    .obs-card textarea:focus { outline: none; border-color: var(--red); }
+  .sino-item { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .sino-item:last-child { border-bottom: none; }
+  .sino-label { font-size: 14px; color: var(--text-muted); line-height: 1.45; margin-bottom: 10px; font-weight: 300; }
+  .sino-btns { display: flex; gap: 8px; }
+  .sino-btn { flex: 1; padding: 9px 8px; border: 1.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 2px; cursor: pointer; transition: all 0.18s; color: var(--text-muted); -webkit-tap-highlight-color: transparent; }
+  .sino-btn.si.active { background: #1a6640; border-color: #1a6640; color: #fff; }
+  .sino-btn.no.active { background: var(--red);  border-color: var(--red);  color: #fff; }
+  .sino-porque { margin-top: 10px; }
+  .sino-porque input { width: 100%; background: var(--surface2); border: 1.5px solid var(--red); border-radius: 6px; color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 13px; padding: 9px 12px; outline: none; transition: box-shadow 0.2s; }
+  .sino-porque input:focus { box-shadow: 0 0 0 3px rgba(195,0,47,0.10); }
+  .sino-porque input::placeholder { color: var(--text-dim); }
 
-    /* SUBMIT */
-    .submit-wrap { text-align: center; margin-top: 10px; }
-    .btn-submit {
-      background: var(--red);
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      padding: 14px 52px;
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .17s;
-      letter-spacing: .04em;
-    }
-    .btn-submit:hover:not(:disabled) { background: var(--red-dk); }
-    .btn-submit:disabled { background: var(--border); color: var(--gray); cursor: not-allowed; }
+  .obs-body { padding: 14px 18px; }
+  textarea { width: 100%; min-height: 80px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 300; padding: 11px 13px; resize: vertical; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(195,0,47,0.08); }
+  textarea::placeholder { color: var(--text-dim); }
 
-    /* MENSAJES */
-    .completado-msg { text-align: center; padding: 32px 20px; }
-    .completado-msg .icon { font-size: 2.8rem; margin-bottom: 12px; }
-    .completado-msg h2 { font-family: 'Noto Serif JP', serif; color: #1a6640; margin-bottom: 6px; }
-    .completado-msg p { color: var(--gray); font-size: .87rem; }
+  .submit-zone { padding: 18px 16px 0; position: relative; z-index: 1; }
+  .submit-btn { width: 100%; padding: 17px; border: none; border-radius: 8px; font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .submit-btn:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
+  .submit-btn.apertura-btn, .submit-btn.dia-btn, .submit-btn.cierre-btn { background: var(--red); color: #fff; box-shadow: 0 4px 18px rgba(195,0,47,0.28); }
+  .submit-btn:not(:disabled):hover  { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(195,0,47,0.36); }
+  .submit-btn:not(:disabled):active { transform: translateY(0); }
+  .submit-btn:not(:disabled)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, transparent 50%); pointer-events: none; }
 
-    .cerrado-msg { text-align: center; padding: 40px 20px; }
-    .cerrado-msg .icon { font-size: 2.4rem; margin-bottom: 14px; }
-    .cerrado-msg h2 { font-family: 'Noto Serif JP', serif; color: var(--red); margin-bottom: 8px; }
-    .cerrado-msg p { color: var(--gray); font-size: .87rem; line-height: 1.6; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; white-space: nowrap; transition: transform 0.4s cubic-bezier(.34,1.56,.64,1); z-index: 999; border-left: 4px solid var(--red); box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+  .toast.show  { transform: translateX(-50%) translateY(0); }
+  .toast.error { border-left-color: #e05050; }
 
-    .turno-ok { text-align: center; padding: 28px 20px; }
-    .turno-ok .icon { font-size: 2.2rem; margin-bottom: 10px; }
-    .turno-ok h2 { font-family: 'Noto Serif JP', serif; color: #1a6640; margin-bottom: 6px; }
-    .turno-ok p { color: var(--gray); font-size: .87rem; }
+  .all-done { text-align: center; padding: 44px 24px; position: relative; z-index: 1; }
+  .all-done-icon  { font-size: 52px; margin-bottom: 16px; }
+  .all-done-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
+  .all-done-sub   { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+  .all-done-kanji { font-family: 'Noto Serif JP', serif; font-size: 64px; font-weight: 900; color: var(--red); opacity: 0.07; margin-top: 24px; letter-spacing: 12px; display: block; }
 
-    .aviso-sucursal {
-      text-align: center;
-      color: var(--gray);
-      padding: 28px 20px;
-      font-size: .88rem;
-    }
-
-    /* TOAST */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(120px);
-      background: #1a1a1a;
-      color: #fff;
-      padding: 12px 26px;
-      border-radius: 8px;
-      font-size: .84rem;
-      transition: transform .3s ease;
-      z-index: 999;
-      white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.ok   { background: #1a6640; }
-    .toast.err  { background: var(--red); }
-
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray);
-      font-family: 'Noto Serif JP', serif;
-      letter-spacing: .1em;
-      font-size: .9rem;
-    }
-  </style>
+  .loading { text-align: center; padding: 60px 20px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--text-dim); position: relative; z-index: 1; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; margin: 0 auto 16px; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none !important; }
+</style>
 </head>
 <body>
 
+<div id="kanjiBg"></div>
+
 <header class="header">
-  <div class="header-left">
-    <svg class="logo-nissan" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="60" cy="60" rx="56" ry="56" fill="none" stroke="#c3002f" stroke-width="5"/>
-      <ellipse cx="60" cy="60" rx="42" ry="42" fill="none" stroke="#c3002f" stroke-width="2.5"/>
-      <rect x="8" y="51" width="104" height="18" rx="3" fill="#fff"/>
-      <rect x="8" y="51" width="104" height="18" rx="3" fill="none" stroke="#c3002f" stroke-width="2"/>
-      <text x="60" y="65" text-anchor="middle" font-family="Arial Black, Arial" font-size="12" font-weight="900" fill="#c3002f" letter-spacing="2">NISSAN</text>
-    </svg>
-    <div class="header-title">
-      <h1>KYOTO Automotores</h1>
-      <p>Check List Diario · Protocolo de Recepción</p>
+  <div class="header-stripe"></div>
+  <div class="header-body">
+    <div class="header-redbar"></div>
+    <div class="header-info">
+      <div class="brand-kyoto">KYOTO</div>
+      <div class="brand-nissan">Nissan — Check List Diario</div>
     </div>
+    <svg class="nissan-logo" width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="50" rx="47" ry="47" stroke="#c3002f" stroke-width="4.5" fill="white"/>
+      <ellipse cx="50" cy="50" rx="36" ry="36" stroke="#c3002f" stroke-width="2" fill="white"/>
+      <rect x="9" y="43" width="82" height="14" fill="#c3002f" rx="2"/>
+      <text x="50" y="39.5" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-size="11.5" font-weight="900" fill="white" letter-spacing="1.5">NISSAN</text>
+    </svg>
+    <div class="header-omotenashi">おもてなし</div>
   </div>
-  <div class="kanji">おもてなし</div>
 </header>
 
-<div class="container">
-  <div id="app"><div class="loading">CARGANDO...</div></div>
+<div id="loadingState" class="loading">
+  <div class="spinner"></div>CARGANDO...
+</div>
+
+<div id="appState" class="hidden">
+  <div class="date-bar" id="dateBar"></div>
+  <div id="turnoBanner" class="turno-banner"></div>
+
+  <div class="progress-section">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-labels">
+      <div class="progress-step" id="stepApertura">🔓 Apertura</div>
+      <div class="progress-step" id="stepDia">🕘 Día</div>
+      <div class="progress-step" id="stepCierre">🔒 Cierre</div>
+    </div>
+  </div>
+
+  <div class="omotenashi-bar">
+    <span class="omo-kanji">お　も　て　な　し</span>
+    <span class="omo-label">Excelencia en el servicio</span>
+  </div>
+
+  <div id="allDoneState" class="hidden">
+    <div class="all-done">
+      <div class="all-done-icon">✅</div>
+      <div class="all-done-title">¡Todo Registrado!</div>
+      <div class="all-done-sub">Los tres turnos del día fueron completados.<br>Excelente trabajo.</div>
+      <span class="all-done-kanji">完了</span>
+    </div>
+  </div>
+
+  <div id="formState">
+    <div class="section">
+      <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
+      <div class="sucursal-grid">
+        <button class="sucursal-btn" data-sucursal="KYOTO RESISTENCIA" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">Resistencia</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO CORRIENTES" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">Corrientes</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO POSADAS" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">Posadas</span>
+        </button>
+        <button class="sucursal-btn" data-sucursal="KYOTO SAENZ PEÑA" onclick="selectSucursal(this)">
+          <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">Sáenz Peña</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="area-header ventas">
+      <div class="area-icon">🚗</div>
+      <div class="area-info">
+        <div class="area-label">Área</div>
+        <div class="area-name">Ventas</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title" id="tituloVentas"></div></div>
+      <div id="listadoVentas"></div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">💬 &nbsp;Observaciones Ventas (opcional)</div></div>
+      <div class="obs-body"><textarea id="obsVentas" placeholder="Novedades o comentarios del área de Ventas..."></textarea></div>
+    </div>
+
+    <div class="area-header posventa">
+      <div class="area-icon">🔧</div>
+      <div class="area-info">
+        <div class="area-label">Área</div>
+        <div class="area-name">Posventa</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title" id="tituloPosventa"></div></div>
+      <div id="listadoPosventa"></div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">💬 &nbsp;Observaciones Posventa (opcional)</div></div>
+      <div class="obs-body"><textarea id="obsPosventa" placeholder="Novedades o comentarios del área de Posventa..."></textarea></div>
+    </div>
+
+    <div class="submit-zone">
+      <button class="submit-btn" id="submitBtn" onclick="enviarTurno()" disabled>Guardar Turno</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// CONFIGURACIÓN
-// ============================================================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZ60tb8xFXkYE3cq2dOBT15Jh3t_RI2la1YJ6ssu59tyqr7GJ6yAnJ3nYB5g03TKae/exec';
 
-const SUCURSALES_LIST = [
-  'KYOTO RESISTENCIA',
-  'KYOTO CORRIENTES',
-  'KYOTO POSADAS',
-  'KYOTO SAENZ PEÑA'
-];
-
 const TURNO_CONFIG = {
-  apertura: {
-    nombre:        'Apertura (6hs - 13hs)',
-    nombreSabado:  'Apertura Sábado (8:30 - 11:30)'
-  },
-  dia: {
-    nombre:        'Día (13hs - 19hs)',
-    nombreSabado:  null
-  },
-  cierre: {
-    nombre:        'Cierre (19hs en adelante)',
-    nombreSabado:  'Cierre Sábado (11:30 - 12:30)'
-  }
+  apertura: { nombre:'Apertura',       icon:'🔓', clase:'apertura', btnClase:'apertura-btn', kanji:'開始' },
+  dia:      { nombre:'Durante el día', icon:'🕘', clase:'dia',      btnClase:'dia-btn',      kanji:'日中' },
+  cierre:   { nombre:'Cierre',         icon:'🔒', clase:'cierre',   btnClase:'cierre-btn',   kanji:'閉店' }
 };
 
 const AREAS = {
@@ -407,45 +313,61 @@ const AREAS = {
   }
 };
 
-// ============================================================
-// ESTADO
-// ============================================================
+// Preguntas del turno actual. Los sábados Posventa usa su propia lista.
+function getPreguntas(area) {
+  if (getDayType() === 'sabado' && area === 'posventa') {
+    return AREAS[area][state.turnoActual + 'Sabado'] || AREAS[area][state.turnoActual];
+  }
+  return AREAS[area][state.turnoActual];
+}
+
 let state = {
-  sucursal:    null,
+  sucursal: null,
   turnoActual: null,
   completados: { apertura: false, dia: false, cierre: false },
-  ventas:      { sinoState: {}, porques: {} },
-  posventa:    { sinoState: {}, porques: {} }
+  ventas:   { sinoState: {}, porques: {} },
+  posventa: { sinoState: {}, porques: {} }
 };
 
-// ============================================================
-// FECHA Y TURNO
-// ============================================================
+// ── KANJI BG ──
+(function() {
+  const words = ['おもてなし','日産','歓迎','丁寧','感謝','誠実','品質','信頼','革新','技術','安全','快適','優雅','完璧','誇り','一番','お客様','サービス','心','礼儀','繁栄','輝き','未来','共に','清潔','整頓','笑顔','挨拶','感動','卓越'];
+  const bg   = document.getElementById('kanjiBg');
+  const cols = Math.ceil(window.innerWidth / 120);
+  for (let r = 0; r < 18; r++) {
+    for (let c = 0; c < cols; c++) {
+      const s = document.createElement('span');
+      s.textContent = words[Math.floor(Math.random() * words.length)];
+      s.style.cssText = `font-size:${22+Math.random()*60}px;left:${(c/cols*100)+(Math.random()*8-4)}vw;top:${(r/18*280)+(Math.random()*5)}vh;transform:rotate(${-20+Math.random()*40}deg);opacity:${0.015+Math.random()*0.025};`;
+      bg.appendChild(s);
+    }
+  }
+})();
+
+// ── UTILIDADES DE FECHA ──
 function getTodayKey() {
   const d = new Date();
-  return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function formatDate() {
+  const d     = new Date();
+  const dias  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  return `${dias[d.getDay()]} ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
 }
 
-function formatDate(str) {
-  const p = str.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
-}
-
+// ── TIPO DE DÍA Y TURNO ──
 function getDayType() {
   const day = new Date().getDay();
   if (day === 0) return 'domingo';
   if (day === 6) return 'sabado';
   return 'semana';
 }
-
 function getTurnoActual() {
   const now = new Date();
   const min = now.getHours() * 60 + now.getMinutes();
   const h   = now.getHours();
   const day = getDayType();
-
   if (day === 'semana') {
     if (h >= 6  && h < 13) return 'apertura';
     if (h >= 13 && h < 19) return 'dia';
@@ -458,239 +380,207 @@ function getTurnoActual() {
   }
   return null;
 }
-
-function getNombreTurno() {
-  const turno = state.turnoActual;
-  if (!turno) return '';
-  const esSabado = getDayType() === 'sabado';
-  if (esSabado && TURNO_CONFIG[turno].nombreSabado) return TURNO_CONFIG[turno].nombreSabado;
-  return TURNO_CONFIG[turno].nombre;
-}
-
 function isAllDone() {
   if (getDayType() === 'sabado') return state.completados.apertura && state.completados.cierre;
   return state.completados.apertura && state.completados.dia && state.completados.cierre;
 }
 
-// ============================================================
-// PREGUNTAS — sábado tiene preguntas distintas en Posventa
-// ============================================================
-function getPreguntas(area) {
-  const esSabado = getDayType() === 'sabado';
-  if (esSabado && area === 'posventa') {
-    const key = state.turnoActual + 'Sabado';
-    return AREAS[area][key] || AREAS[area][state.turnoActual];
-  }
-  return AREAS[area][state.turnoActual];
-}
-
-// ============================================================
-// LOCAL STORAGE
-// ============================================================
-function guardarEstado() {
-  localStorage.setItem('kyoto_state_' + getTodayKey(), JSON.stringify(state));
-}
-
-function cargarEstado() {
+// ── LOCAL STORAGE ──
+function loadLocalState() {
   try {
-    const raw = localStorage.getItem('kyoto_state_' + getTodayKey());
-    if (raw) {
-      const saved = JSON.parse(raw);
-      state = Object.assign(state, saved);
-    }
+    const k = 'kyoto_' + getTodayKey();
+    const s = localStorage.getItem(k);
+    if (s) state.completados = JSON.parse(s).completados || state.completados;
+    Object.keys(localStorage).forEach(key => { if (key.startsWith('kyoto_') && key !== k) localStorage.removeItem(key); });
   } catch(e) {}
 }
+function saveLocalState() {
+  try { localStorage.setItem('kyoto_' + getTodayKey(), JSON.stringify({ completados: state.completados })); } catch(e) {}
+}
 
-// ============================================================
-// RENDER
-// ============================================================
-function renderApp() {
-  const app = document.getElementById('app');
-  let html  = '';
+// ── MENSAJE CERRADO ──
+function showMensajeCerrado(icon, titulo, sub, kanji) {
+  document.getElementById('formState').classList.add('hidden');
+  const d = document.getElementById('allDoneState');
+  d.classList.remove('hidden');
+  d.querySelector('.all-done-icon').textContent  = icon;
+  d.querySelector('.all-done-title').textContent = titulo;
+  d.querySelector('.all-done-sub').textContent   = sub;
+  d.querySelector('.all-done-kanji').textContent = kanji;
+}
 
-  // Selector de sucursal (siempre visible)
-  html += '<div class="card">';
-  html += '<div class="card-title">Seleccioná tu sucursal</div>';
-  html += '<div class="sucursal-grid">';
-  SUCURSALES_LIST.forEach(function(s) {
-    const a = state.sucursal === s ? ' active' : '';
-    html += '<button class="sucursal-btn' + a + '" onclick="seleccionarSucursal(\'' + s + '\')">' + s + '</button>';
-  });
-  html += '</div></div>';
+// ── INIT ──
+function initApp() {
+  loadLocalState();
+  const dayType = getDayType();
+  state.turnoActual = getTurnoActual();
+  document.getElementById('dateBar').textContent = formatDate();
+  renderProgress();
 
-  // Día completo
-  if (state.sucursal && isAllDone()) {
-    html += renderDiaCompleto();
-    app.innerHTML = html;
-    return;
+  if (dayType === 'domingo') {
+    showMensajeCerrado('🌸', 'Domingo — Día de Descanso',
+      'Hoy no hay operaciones programadas.\nNos vemos el lunes.', '休日');
+
+  } else if (dayType === 'sabado' && state.turnoActual === null) {
+    const min = new Date().getHours() * 60 + new Date().getMinutes();
+    if (min < 8*60+30) {
+      showMensajeCerrado('⏰', 'Aún no es hora',
+        'La apertura del sábado comienza a las 8:30hs.', '待機');
+    } else {
+      showMensajeCerrado('✅', '¡Jornada Completa!',
+        'La jornada del sábado ha finalizado.\nExcelente trabajo.', '完了');
+    }
+
+  } else if (isAllDone()) {
+    renderTurnoBanner();
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
+
+  } else {
+    renderTurnoBanner();
+    renderChecklists();
+    renderSubmitBtn();
   }
 
-  // Domingo
-  if (getDayType() === 'domingo') {
-    html += '<div class="card cerrado-msg"><div class="icon">🏮</div>' +
-            '<h2>Domingo</h2><p>Hoy no hay operaciones programadas.<br>El check list estará disponible el lunes.</p></div>';
-    app.innerHTML = html;
-    return;
-  }
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('appState').classList.remove('hidden');
+}
 
-  // Sábado fuera de horario
-  if (getDayType() === 'sabado' && !state.turnoActual) {
-    html += '<div class="card cerrado-msg"><div class="icon">🏮</div>' +
-            '<h2>Fuera de horario</h2>' +
-            '<p>El sábado opera en dos turnos:<br>Apertura: 8:30 – 11:30 · Cierre: 11:30 – 12:30</p></div>';
-    app.innerHTML = html;
-    return;
-  }
+// ── RENDER TURNO BANNER ──
+function renderTurnoBanner() {
+  if (!state.turnoActual) return;
+  const t       = TURNO_CONFIG[state.turnoActual];
+  const banner  = document.getElementById('turnoBanner');
+  const yaHecho = state.completados[state.turnoActual];
+  const dayType = getDayType();
 
-  // Progress bar
-  html += renderProgress();
+  if (yaHecho) {
+    banner.className = 'turno-banner completo';
+    banner.innerHTML = `
+      <div class="turno-icon">✅</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno completado</div>
+        <div class="turno-name">Esperando próximo turno</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">次へ</div>
+      </div>`;
+    document.getElementById('formState').classList.add('hidden');
+    document.getElementById('allDoneState').classList.remove('hidden');
 
-  // Turno banner
-  html += '<div class="turno-banner"><h2>' + getNombreTurno() + '</h2>' +
-          '<span class="hora" id="horaLive"></span></div>';
-
-  // Turno ya completado
-  if (state.completados[state.turnoActual]) {
-    html += '<div class="card turno-ok">' +
-            '<div class="icon">✅</div>' +
-            '<h2>Turno registrado</h2>' +
-            '<p>Este turno ya fue guardado correctamente.</p></div>';
-    app.innerHTML = html;
-    actualizarHora();
-    return;
-  }
-
-  // Sin sucursal seleccionada
-  if (!state.sucursal) {
-    html += '<div class="card aviso-sucursal">Seleccioná una sucursal para continuar.</div>';
-    app.innerHTML = html;
-    return;
-  }
-
-  // Sección VENTAS
-  html += '<div class="area-section">';
-  html += '<div class="area-header">▸ Ventas</div>';
-  getPreguntas('ventas').forEach(function(label, idx) {
-    html += renderItem('ventas', idx, label);
-  });
-  html += '<div class="obs-card">' +
-          '<label>Observaciones generales de Ventas (opcional)</label>' +
-          '<textarea id="obsVentas" placeholder="Comentarios adicionales..."></textarea>' +
-          '</div></div>';
-
-  // Sección POSVENTA
-  html += '<div class="area-section">';
-  html += '<div class="area-header">▸ Posventa</div>';
-  getPreguntas('posventa').forEach(function(label, idx) {
-    html += renderItem('posventa', idx, label);
-  });
-  html += '<div class="obs-card">' +
-          '<label>Observaciones generales de Posventa (opcional)</label>' +
-          '<textarea id="obsPosventa" placeholder="Comentarios adicionales..."></textarea>' +
-          '</div></div>';
-
-  // Botón enviar
-  html += '<div class="submit-wrap">' +
-          '<button class="btn-submit" id="btnSubmit" onclick="enviarTurno()">Guardar Turno</button>' +
-          '</div>';
-
-  app.innerHTML = html;
-
-  // Restaurar estado visual de botones SI/NO (solo si el usuario ya respondió)
-  ['ventas', 'posventa'].forEach(function(area) {
-    getPreguntas(area).forEach(function(_, idx) {
-      const val = state[area].sinoState[idx];
-      if (!val) return;  // sin respuesta → ningún botón se marca
-      const btn = document.querySelector('[data-area="' + area + '"][data-idx="' + idx + '"][data-val="' + val + '"]');
-      if (btn) btn.classList.add('active');
-      if (val === 'NO') {
-        const pq = document.getElementById('pq_' + area + '_' + idx);
-        if (pq) {
-          pq.classList.add('show');
-          const ta = pq.querySelector('textarea');
-          if (ta && state[area].porques[idx]) ta.value = state[area].porques[idx];
-        }
+    if (!isAllDone()) {
+      let next;
+      if (dayType === 'sabado') {
+        next = 'Cierre (desde las 11:30hs)';
+      } else {
+        next = state.turnoActual === 'apertura' ? 'Durante el día (desde las 13hs)' : 'Cierre (desde las 19hs)';
       }
-    });
-  });
-
-  actualizarHora();
+      const d = document.getElementById('allDoneState');
+      d.querySelector('.all-done-title').textContent = 'Turno Guardado ✓';
+      d.querySelector('.all-done-icon').textContent  = '⏳';
+      d.querySelector('.all-done-sub').textContent   = `Volvé para completar: ${next}`;
+      d.querySelector('.all-done-kanji').textContent = '次へ';
+    }
+  } else {
+    banner.className = `turno-banner ${t.clase}`;
+    banner.innerHTML = `
+      <div class="turno-icon">${t.icon}</div>
+      <div class="turno-info">
+        <div class="turno-label">Turno actual</div>
+        <div class="turno-name">${t.nombre}</div>
+      </div>
+      <div class="turno-side">
+        <div class="turno-time">${new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="turno-kanji">${t.kanji}</div>
+      </div>`;
+  }
 }
 
-function renderItem(area, idx, label) {
-  return '<div class="item-card">' +
-    '<div class="item-row">' +
-    '<span class="item-label">' + label + '</span>' +
-    '<div class="sino-btns">' +
-    '<button class="sino-btn si" data-area="' + area + '" data-idx="' + idx + '" data-val="SI" ' +
-      'onclick="marcarSino(\'' + area + '\',' + idx + ',\'SI\')">SI</button>' +
-    '<button class="sino-btn no" data-area="' + area + '" data-idx="' + idx + '" data-val="NO" ' +
-      'onclick="marcarSino(\'' + area + '\',' + idx + ',\'NO\')">NO</button>' +
-    '</div></div>' +
-    '<div class="porque-field" id="pq_' + area + '_' + idx + '">' +
-    '<div class="porque-label">¿Por qué? Describí el motivo...</div>' +
-    '<textarea onchange="guardarPorque(\'' + area + '\',' + idx + ',this.value)" ' +
-      'placeholder="Describí el motivo..."></textarea>' +
-    '</div></div>';
-}
-
+// ── RENDER PROGRESS ──
 function renderProgress() {
-  const esSabado = getDayType() === 'sabado';
-  const pasos = esSabado
-    ? [['apertura','Apertura'],['cierre','Cierre']]
-    : [['apertura','Apertura'],['dia','Día'],['cierre','Cierre']];
+  const isSabado = getDayType() === 'sabado';
+  document.getElementById('stepDia').style.display = isSabado ? 'none' : '';
 
-  let html = '<div class="progress-bar">';
-  pasos.forEach(function(p) {
-    let cls = '';
-    if (state.completados[p[0]])        cls = ' done';
-    else if (state.turnoActual === p[0]) cls = ' active';
-    html += '<div class="progress-step' + cls + '">' + p[1] + '</div>';
+  const keys = isSabado ? ['apertura','cierre']          : ['apertura','dia','cierre'];
+  const ids  = isSabado ? ['stepApertura','stepCierre']  : ['stepApertura','stepDia','stepCierre'];
+  const lbls = isSabado ? ['🔓 Apertura','🔒 Cierre']    : ['🔓 Apertura','🕘 Día','🔒 Cierre'];
+
+  let done = 0;
+  keys.forEach((k, i) => {
+    const el = document.getElementById(ids[i]);
+    if (state.completados[k])        { el.className = 'progress-step done'; done++; }
+    else if (k === state.turnoActual)  el.className = 'progress-step active';
+    else                               el.className = 'progress-step';
+    el.textContent = lbls[i];
   });
-  return html + '</div>';
+  document.getElementById('progressFill').style.width = `${(done / keys.length) * 100}%`;
 }
 
-function renderDiaCompleto() {
-  return '<div class="card completado-msg">' +
-    '<div class="icon">🎌</div>' +
-    '<h2>¡Día completado!</h2>' +
-    '<p>Todos los turnos fueron registrados correctamente.<br>' +
-    formatDate(getTodayKey()) + ' · ' + (state.sucursal || '') + '</p>' +
-    '</div>';
+// ── RENDER CHECKLISTS ──
+function renderChecklists() {
+  const t = TURNO_CONFIG[state.turnoActual];
+  state.ventas   = { sinoState: {}, porques: {} };
+  state.posventa = { sinoState: {}, porques: {} };
+  document.getElementById('tituloVentas').textContent   = `${t.icon}  ${t.nombre} — Ventas`;
+  document.getElementById('tituloPosventa').textContent = `${t.icon}  ${t.nombre} — Posventa`;
+  renderAreaItems('ventas',   getPreguntas('ventas'),   'listadoVentas');
+  renderAreaItems('posventa', getPreguntas('posventa'), 'listadoPosventa');
 }
 
-// ============================================================
-// INTERACCIONES
-// ============================================================
-function seleccionarSucursal(suc) {
-  state.sucursal = suc;
-  guardarEstado();
-  renderApp();
-}
-
-function marcarSino(area, idx, val) {
-  state[area].sinoState[idx] = val;
-  guardarEstado();
-
-  const btns = document.querySelectorAll('[data-area="' + area + '"][data-idx="' + idx + '"]');
-  btns.forEach(function(b) {
-    b.classList.toggle('active', b.dataset.val === val);
+function renderAreaItems(area, items, containerId) {
+  const body = document.getElementById(containerId);
+  body.innerHTML = '';
+  items.forEach((item, idx) => {
+    state[area].sinoState[idx] = null;
+    state[area].porques[idx]   = '';
+    const div = document.createElement('div');
+    div.className = 'sino-item';
+    div.innerHTML = `
+      <div class="sino-label">${item}</div>
+      <div class="sino-btns">
+        <button class="sino-btn si" onclick="selectSiNo('${area}',${idx},'SI',this)">✓ &nbsp;SI</button>
+        <button class="sino-btn no" onclick="selectSiNo('${area}',${idx},'NO',this)">✗ &nbsp;NO</button>
+      </div>
+      <div class="sino-porque hidden" id="pq_${area}_${idx}">
+        <input type="text" placeholder="¿Por qué? Describí el motivo..." oninput="state['${area}'].porques[${idx}]=this.value">
+      </div>`;
+    body.appendChild(div);
   });
-
-  const pq = document.getElementById('pq_' + area + '_' + idx);
-  if (pq) pq.classList.toggle('show', val === 'NO');
 }
 
-function guardarPorque(area, idx, val) {
-  state[area].porques[idx] = val;
-  guardarEstado();
+function selectSiNo(area, idx, valor, btn) {
+  state[area].sinoState[idx] = valor;
+  btn.closest('.sino-btns').querySelectorAll('.sino-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const pq = document.getElementById(`pq_${area}_${idx}`);
+  if (valor === 'NO') {
+    pq.classList.remove('hidden');
+  } else {
+    pq.classList.add('hidden');
+    state[area].porques[idx] = '';
+    const input = pq.querySelector('input');
+    if (input) input.value = '';
+  }
 }
 
-// ============================================================
-// BUILD PAYLOAD
-// ============================================================
+function selectSucursal(btn) {
+  document.querySelectorAll('.sucursal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.sucursal = btn.dataset.sucursal;
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function renderSubmitBtn() {
+  const btn = document.getElementById('submitBtn');
+  const t   = TURNO_CONFIG[state.turnoActual];
+  btn.className   = `submit-btn ${t.btnClase}`;
+  btn.textContent = `Guardar ${t.nombre}`;
+  btn.disabled    = true;
+}
+
 function buildItems(area) {
-  return getPreguntas(area).map(function(label, idx) {
+  return getPreguntas(area).map((label, idx) => {
     const respuesta = state[area].sinoState[idx] || '';
     return {
       item:      label,
@@ -701,30 +591,31 @@ function buildItems(area) {
   });
 }
 
-function buildObs(id) {
-  const el = document.getElementById(id);
-  return el ? el.value.trim() : '';
-}
-
-// ============================================================
-// ENVIAR
-// ============================================================
-async function enviarTurno() {
-  if (!state.sucursal) return;
-
-  const faltantes = [];
-  ['ventas', 'posventa'].forEach(function(area) {
-    getPreguntas(area).forEach(function(_, idx) {
-      if (!state[area].sinoState[idx]) faltantes.push(area + ' #' + (idx+1));
+// Devuelve la cantidad de items todavía sin responder
+function contarSinResponder() {
+  let n = 0;
+  ['ventas','posventa'].forEach(area => {
+    getPreguntas(area).forEach((_, idx) => {
+      if (!state[area].sinoState[idx]) n++;
     });
   });
-  if (faltantes.length > 0) {
-    mostrarToast('✗ Faltan responder ' + faltantes.length + ' pregunta(s)', 'err');
+  return n;
+}
+
+function buildObs(area, obsId) {
+  return document.getElementById(obsId).value.trim();
+}
+
+async function enviarTurno() {
+  const faltan = contarSinResponder();
+  if (faltan > 0) {
+    showToast(`✗ Faltan responder ${faltan} pregunta${faltan > 1 ? 's' : ''}`, true);
     return;
   }
 
-  const btn = document.getElementById('btnSubmit');
-  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  const t = TURNO_CONFIG[state.turnoActual];
 
   const payload = {
     accion:        'guardarTurno',
@@ -732,62 +623,33 @@ async function enviarTurno() {
     hora:          new Date().toLocaleTimeString('es-AR'),
     sucursal:      state.sucursal,
     turno:         state.turnoActual,
-    turnoNombre:   getNombreTurno(),
+    turnoNombre:   t.nombre,
     itemsVentas:   JSON.stringify(buildItems('ventas')),
-    obsVentas:     buildObs('obsVentas'),
+    obsVentas:     buildObs('ventas',   'obsVentas'),
     itemsPosventa: JSON.stringify(buildItems('posventa')),
-    obsPosventa:   buildObs('obsPosventa')
+    obsPosventa:   buildObs('posventa', 'obsPosventa')
   };
 
   try {
-    const res  = await fetch(SCRIPT_URL, {
-      method:   'POST',
-      headers:  { 'Content-Type': 'text/plain' },
-      body:     JSON.stringify(payload),
-      redirect: 'follow'
-    });
-    const json = await res.json();
-    if (json.ok !== false) {
+    const res    = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), redirect:'follow' });
+    const result = await res.json();
+    if (result.ok) {
       state.completados[state.turnoActual] = true;
-      state.ventas   = { sinoState: {}, porques: {} };
-      state.posventa = { sinoState: {}, porques: {} };
-      guardarEstado();
-      mostrarToast('✓ Turno guardado correctamente', 'ok');
-      setTimeout(renderApp, 1200);
-    } else {
-      throw new Error(json.error || 'Error desconocido');
-    }
+      saveLocalState();
+      showToast('✓ Turno guardado correctamente');
+      setTimeout(() => { renderTurnoBanner(); renderProgress(); }, 1200);
+    } else throw new Error('Error servidor');
   } catch(e) {
-    mostrarToast('✗ Error al guardar. Verificá la conexión.', 'err');
-    if (btn) { btn.disabled = false; btn.textContent = 'Guardar Turno'; }
+    showToast('✗ Error al guardar. Verificá la conexión.', true);
+    btn.disabled = false; renderSubmitBtn();
   }
 }
 
-// ============================================================
-// UTILIDADES
-// ============================================================
-function mostrarToast(msg, tipo) {
+function showToast(msg, error=false) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className   = 'toast ' + (tipo || '');
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 3000);
-}
-
-function actualizarHora() {
-  const el = document.getElementById('horaLive');
-  if (!el) return;
-  el.textContent = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-  setTimeout(actualizarHora, 15000);
-}
-
-// ============================================================
-// INIT
-// ============================================================
-function initApp() {
-  cargarEstado();
-  state.turnoActual = getTurnoActual();
-  renderApp();
+  t.textContent = msg; t.className = error ? 'toast error' : 'toast';
+  setTimeout(() => t.classList.add('show'), 50);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 window.addEventListener('load', initApp);
