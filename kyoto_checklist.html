@@ -596,12 +596,12 @@ function renderApp() {
 
   app.innerHTML = html;
 
-  // Restaurar estado visual de botones SI/NO
+  // Restaurar estado visual de botones SI/NO (solo si el usuario ya respondió)
   ['ventas', 'posventa'].forEach(function(area) {
     getPreguntas(area).forEach(function(_, idx) {
       const val = state[area].sinoState[idx];
-      const valorActivo = val || 'SI';
-      const btn = document.querySelector('[data-area="' + area + '"][data-idx="' + idx + '"][data-val="' + valorActivo + '"]');
+      if (!val) return;  // sin respuesta → ningún botón se marca
+      const btn = document.querySelector('[data-area="' + area + '"][data-idx="' + idx + '"][data-val="' + val + '"]');
       if (btn) btn.classList.add('active');
       if (val === 'NO') {
         const pq = document.getElementById('pq_' + area + '_' + idx);
@@ -691,11 +691,12 @@ function guardarPorque(area, idx, val) {
 // ============================================================
 function buildItems(area) {
   return getPreguntas(area).map(function(label, idx) {
+    const respuesta = state[area].sinoState[idx] || '';
     return {
       item:      label,
-      ok:        state[area].sinoState[idx] !== 'NO',
-      respuesta: state[area].sinoState[idx] || 'SI',
-      porque:    state[area].porques[idx]   || ''
+      ok:        respuesta === 'SI',
+      respuesta: respuesta,
+      porque:    state[area].porques[idx] || ''
     };
   });
 }
@@ -710,6 +711,17 @@ function buildObs(id) {
 // ============================================================
 async function enviarTurno() {
   if (!state.sucursal) return;
+
+  const faltantes = [];
+  ['ventas', 'posventa'].forEach(function(area) {
+    getPreguntas(area).forEach(function(_, idx) {
+      if (!state[area].sinoState[idx]) faltantes.push(area + ' #' + (idx+1));
+    });
+  });
+  if (faltantes.length > 0) {
+    mostrarToast('✗ Faltan responder ' + faltantes.length + ' pregunta(s)', 'err');
+    return;
+  }
 
   const btn = document.getElementById('btnSubmit');
   if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
