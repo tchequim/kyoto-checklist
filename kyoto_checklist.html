@@ -130,6 +130,62 @@
   .loading { text-align: center; padding: 60px 20px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--text-dim); position: relative; z-index: 1; }
   .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; margin: 0 auto 16px; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── SOLAPAS ── */
+  :root {
+    --exterior: #0e6b6b; --exterior-bg: #eef7f7; --exterior-border: #8fcaca;
+    --interior: #5a1a6e; --interior-bg: #f5eef9; --interior-border: #c09ed0;
+  }
+  .toast { width: max-content; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
+  .tabs { display: flex; gap: 6px; margin: 14px 16px 0; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; position: relative; z-index: 1; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .tab-btn { flex: 1; padding: 10px 6px 9px; border: none; border-radius: 7px; background: transparent; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
+  .tab-btn:hover  { background: var(--red-light); color: var(--red); }
+  .tab-btn.active { background: var(--red); color: #fff; box-shadow: 0 2px 10px rgba(195,0,47,0.25); }
+  .tab-kanji { display: block; font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; margin-bottom: 3px; }
+
+  .turno-banner.vehiculos { background: var(--exterior-bg); border: 1px solid var(--exterior-border); border-left: 4px solid var(--exterior); }
+  .turno-banner.vehiculos .turno-name { color: var(--exterior); }
+  .turno-banner.auditoria { background: var(--interior-bg); border: 1px solid var(--interior-border); border-left: 4px solid var(--interior); }
+  .turno-banner.auditoria .turno-name { color: var(--interior); }
+  .area-header.exterior { background: var(--exterior-bg); border: 1px solid var(--exterior-border); border-left: 4px solid var(--exterior); }
+  .area-header.interior { background: var(--interior-bg); border: 1px solid var(--interior-border); border-left: 4px solid var(--interior); }
+  .area-header.exterior .area-name { color: var(--exterior); }
+  .area-header.interior .area-name { color: var(--interior); }
+
+  .veh-select-wrap { padding: 14px 18px; }
+  .veh-select { width: 100%; padding: 12px 40px 12px 14px; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c3002f' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center; font-family: 'Noto Serif JP', serif; font-size: 15px; color: var(--text); outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .veh-select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(195,0,47,0.08); }
+
+  .lock-card { text-align: center; padding: 34px 22px 10px; margin-top: 18px; }
+  .lock-icon  { font-size: 40px; margin-bottom: 12px; }
+  .lock-title { font-family: 'Noto Serif JP', serif; font-size: 19px; font-weight: 700; color: var(--interior); margin-bottom: 6px; }
+  .lock-sub   { font-size: 13px; color: var(--text-muted); font-weight: 300; margin-bottom: 18px; line-height: 1.5; }
+  .lock-input { width: 100%; max-width: 280px; padding: 12px 14px; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface2); font-family: 'DM Mono', monospace; font-size: 15px; letter-spacing: 4px; text-align: center; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .lock-input:focus { border-color: var(--interior); box-shadow: 0 0 0 3px rgba(90,26,110,0.10); }
+  .lock-error { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--red); margin-top: 10px; }
+  .lock-btn   { max-width: 280px; margin-top: 14px; }
+  .lock-card .all-done-kanji { margin-top: 10px; }
+
+  .aud-score { text-align: center; padding: 26px 18px 22px; }
+  .aud-pct { font-family: 'Noto Serif JP', serif; font-size: 58px; font-weight: 900; line-height: 1; }
+  .aud-pct.alto  { color: #1a6640; }
+  .aud-pct.medio { color: #b36b00; }
+  .aud-pct.bajo  { color: var(--red); }
+  .aud-pct-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-top: 8px; }
+  .aud-detalle { font-size: 14px; color: var(--text-muted); margin-top: 12px; }
+  .aud-ref     { font-size: 12px; color: var(--text-dim); margin-top: 4px; font-weight: 300; }
+  .aud-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+  .aud-item:last-child { border-bottom: none; }
+  .aud-area { flex-shrink: 0; font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding-top: 4px; width: 62px; }
+  .aud-item-body { flex: 1; }
+  .aud-item-text { font-size: 14px; color: var(--text); line-height: 1.45; }
+  .aud-porque { font-size: 12px; color: var(--text-muted); font-weight: 300; margin-top: 3px; }
+  .aud-tags { flex-shrink: 0; display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-dim); }
+  .aud-tag { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; padding: 3px 7px; border-radius: 4px; }
+  .aud-tag.si { background: #eef7f2; color: #1a6640; }
+  .aud-tag.no { background: var(--red-light); color: var(--red); }
+  .aud-vacio { padding: 16px 18px; font-size: 14px; color: #1a6640; }
+
   .hidden { display: none !important; }
 </style>
 </head>
@@ -161,6 +217,15 @@
 
 <div id="appState" class="hidden">
   <div class="date-bar" id="dateBar"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tabBtn_salon"     onclick="mostrarTab('salon')"><span class="tab-kanji">店内</span>Salón</button>
+    <button class="tab-btn"        id="tabBtn_vehiculos" onclick="mostrarTab('vehiculos')"><span class="tab-kanji">車両</span>Vehículos</button>
+    <button class="tab-btn"        id="tabBtn_auditoria" onclick="mostrarTab('auditoria')"><span class="tab-kanji">監査</span>Auditoría</button>
+  </div>
+
+  <!-- ═══ SOLAPA SALÓN ═══ -->
+  <div id="tab_salon">
   <div id="turnoBanner" class="turno-banner"></div>
 
   <div class="progress-section">
@@ -240,6 +305,33 @@
     <div class="submit-zone">
       <button class="submit-btn" id="submitBtn" onclick="enviarTurno()" disabled>Guardar Turno</button>
     </div>
+  </div>
+  </div>
+
+  <!-- ═══ SOLAPA VEHÍCULOS ═══ -->
+  <div id="tab_vehiculos" class="hidden">
+    <div class="turno-banner vehiculos">
+      <div class="turno-icon">🚘</div>
+      <div class="turno-info">
+        <div class="turno-label">Una vez por día</div>
+        <div class="turno-name">Checklist de Vehículos</div>
+      </div>
+      <div class="turno-side"><div class="turno-kanji">車両</div></div>
+    </div>
+    <div id="vehContenido"></div>
+  </div>
+
+  <!-- ═══ SOLAPA AUDITORÍA ═══ -->
+  <div id="tab_auditoria" class="hidden">
+    <div class="turno-banner auditoria">
+      <div class="turno-icon">🕵️</div>
+      <div class="turno-info">
+        <div class="turno-label">Sólo supervisores</div>
+        <div class="turno-name">Auditoría de Vehículos</div>
+      </div>
+      <div class="turno-side"><div class="turno-kanji">監査</div></div>
+    </div>
+    <div id="audContenido"></div>
   </div>
 </div>
 
@@ -652,7 +744,403 @@ function showToast(msg, error=false) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-window.addEventListener('load', initApp);
+// ════════════════════════════════════════════════════════════
+// SOLAPAS VEHÍCULOS Y AUDITORÍA
+// ════════════════════════════════════════════════════════════
+const SUCURSALES_V = [
+  ['KYOTO RESISTENCIA', 'Resistencia'],
+  ['KYOTO CORRIENTES',  'Corrientes'],
+  ['KYOTO POSADAS',     'Posadas'],
+  ['KYOTO SAENZ PEÑA',  'Sáenz Peña']
+];
+
+const VEHICULOS = [
+  'VERSA 1.6 SENSE',
+  'VERSA 1.6 ADVANCE CVT',
+  'VERSA 1.6 EXCLUSIVE CVT',
+  'SENTRA 2.0 ADVANCE CVT',
+  'SENTRA 2.0 EXCLUSIVE CVT',
+  'KICKS SENSE DCT 1.0T',
+  'KICKS EXCLUSIVE DCT',
+  'KAIT SENSE CVT',
+  'KAIT 1,6 ADVANCE CVT',
+  'KAIT EXCLUSIVE CVT',
+  'X-TRAIL 2,5 ADVANCE CVT',
+  'X-TRAIL 2,5 EXCLUSIVE CVT',
+  'X-TRAIL EPOWER EXCLUSIVE CVT',
+  'FRONTIER S 4X2 MT 2.3 D CD'
+];
+
+const PREGUNTAS_VEHICULO = {
+  exterior: [
+    'Parrilla frontal limpia',
+    'Carrocería limpia',
+    'Puertas limpias',
+    'Capot limpio',
+    'Techo limpio',
+    'Vidrios y espejos limpios',
+    'Ópticas limpias',
+    'Ruedas y llantas limpias',
+    'Neumáticos limpios',
+    'Tapa de combustible limpia',
+    'Parte trasera limpia'
+  ],
+  interior: [
+    'Tablero y consola central limpios',
+    'Asientos limpios',
+    'Alfombras limpias',
+    'Pisos limpios',
+    'Paneles interiores de puertas limpios',
+    'Cinturones de seguridad limpios y correctamente posicionados',
+    'Asientos correctamente posicionados',
+    'Baúl limpio y ordenado',
+    'Burletes limpios',
+    'Cristales interiores limpios',
+    'Compartimentos portaobjetos limpios',
+    'Sin residuos ni objetos en el habitáculo'
+  ]
+};
+
+// 'veh' = solapa Vehículos, 'aud' = solapa Auditoría
+const vState = { veh: nuevoVForm(), aud: nuevoVForm() };
+// La contraseña se valida en el Apps Script y sólo queda en memoria mientras la página esté abierta
+let claveAuditoria = null;
+
+function nuevoVForm() {
+  return {
+    sucursal: null, vehiculo: '',
+    exterior: { sinoState: {}, porques: {} },
+    interior: { sinoState: {}, porques: {} }
+  };
+}
+
+function esc(txt) {
+  return String(txt).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+async function postScript(payload) {
+  const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), redirect:'follow' });
+  return res.json();
+}
+
+// ── SOLAPAS ──
+function mostrarTab(tab) {
+  ['salon', 'vehiculos', 'auditoria'].forEach(t => {
+    document.getElementById('tab_' + t).classList.toggle('hidden', t !== tab);
+    document.getElementById('tabBtn_' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'auditoria') renderAuditoria();
+}
+
+// ── FORMULARIO COMPARTIDO (Vehículos / Auditoría) ──
+function vFormHTML(pref) {
+  const sucursales = SUCURSALES_V.map(([id, ciudad]) => `
+    <button class="sucursal-btn" data-sucursal="${id}" onclick="vSelectSucursal('${pref}', this)">
+      <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">${ciudad}</span>
+    </button>`).join('');
+  const opciones = VEHICULOS.map(v => `<option value="${v}">${v}</option>`).join('');
+  return `
+    <div class="section">
+      <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
+      <div class="sucursal-grid">${sucursales}</div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">🚘 &nbsp;Vehículo</div></div>
+      <div class="veh-select-wrap">
+        <select class="veh-select" id="${pref}_vehiculo" onchange="vState['${pref}'].vehiculo = this.value">
+          <option value="">Seleccioná un vehículo...</option>${opciones}
+        </select>
+      </div>
+    </div>
+    ${vAreaHTML(pref, 'exterior', '🌤️', 'Exterior')}
+    ${vAreaHTML(pref, 'interior', '💺', 'Interior')}
+    <div class="section">
+      <div class="section-header"><div class="section-title">💬 &nbsp;Observaciones (opcional)</div></div>
+      <div class="obs-body"><textarea id="${pref}_obs" placeholder="Novedades o comentarios sobre el vehículo..."></textarea></div>
+    </div>`;
+}
+
+function vAreaHTML(pref, area, icon, nombre) {
+  const items = PREGUNTAS_VEHICULO[area].map((item, idx) => `
+    <div class="sino-item">
+      <div class="sino-label">${item}</div>
+      <div class="sino-btns">
+        <button class="sino-btn si" onclick="vSelectSiNo('${pref}','${area}',${idx},'SI',this)">✓ &nbsp;SI</button>
+        <button class="sino-btn no" onclick="vSelectSiNo('${pref}','${area}',${idx},'NO',this)">✗ &nbsp;NO</button>
+      </div>
+      <div class="sino-porque hidden" id="${pref}_pq_${area}_${idx}">
+        <input type="text" placeholder="¿Por qué? Describí el motivo..." oninput="vState['${pref}']['${area}'].porques[${idx}] = this.value">
+      </div>
+    </div>`).join('');
+  return `
+    <div class="area-header ${area}">
+      <div class="area-icon">${icon}</div>
+      <div class="area-info">
+        <div class="area-label">Área</div>
+        <div class="area-name">${nombre}</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">${icon} &nbsp;${nombre} — ${PREGUNTAS_VEHICULO[area].length} puntos</div></div>
+      ${items}
+    </div>`;
+}
+
+function vSelectSucursal(pref, btn) {
+  btn.parentElement.querySelectorAll('.sucursal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  vState[pref].sucursal = btn.dataset.sucursal;
+}
+
+function vSelectSiNo(pref, area, idx, valor, btn) {
+  const f = vState[pref][area];
+  f.sinoState[idx] = valor;
+  btn.closest('.sino-btns').querySelectorAll('.sino-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const pq = document.getElementById(`${pref}_pq_${area}_${idx}`);
+  if (valor === 'NO') {
+    pq.classList.remove('hidden');
+  } else {
+    pq.classList.add('hidden');
+    f.porques[idx] = '';
+    pq.querySelector('input').value = '';
+  }
+}
+
+// Qué falta completar antes de poder guardar
+function vFaltantes(pref) {
+  const f = vState[pref];
+  const faltan = [];
+  if (!f.sucursal) faltan.push('la sucursal');
+  if (!f.vehiculo) faltan.push('el vehículo');
+  let n = 0;
+  ['exterior', 'interior'].forEach(a => PREGUNTAS_VEHICULO[a].forEach((_, i) => { if (!f[a].sinoState[i]) n++; }));
+  if (n) faltan.push(`${n} pregunta${n > 1 ? 's' : ''}`);
+  return faltan;
+}
+
+function vItems(pref, area) {
+  return PREGUNTAS_VEHICULO[area].map((label, idx) => {
+    const respuesta = vState[pref][area].sinoState[idx] || '';
+    return { item: label, ok: respuesta === 'SI', respuesta: respuesta, porque: vState[pref][area].porques[idx] || '' };
+  });
+}
+
+function vPayload(pref, accion) {
+  const f = vState[pref];
+  return {
+    accion:        accion,
+    fecha:         getTodayKey(),
+    hora:          new Date().toLocaleTimeString('es-AR'),
+    sucursal:      f.sucursal,
+    vehiculo:      f.vehiculo,
+    itemsExterior: JSON.stringify(vItems(pref, 'exterior')),
+    itemsInterior: JSON.stringify(vItems(pref, 'interior')),
+    obs:           document.getElementById(`${pref}_obs`).value.trim()
+  };
+}
+
+// ── VEHÍCULOS: se completa una vez por día (en este dispositivo) y se reabre al día siguiente ──
+// Prefijo distinto de 'kyoto_' para que la limpieza de Salón no lo borre
+const VEH_KEY_PREFIX = 'kyotoVeh_';
+function vehHoyKey() { return VEH_KEY_PREFIX + getTodayKey(); }
+
+function vehRegistroHoy() {
+  try { return JSON.parse(localStorage.getItem(vehHoyKey())); } catch(e) { return null; }
+}
+
+function limpiarVehViejos() {
+  try {
+    Object.keys(localStorage).forEach(k => { if (k.startsWith(VEH_KEY_PREFIX) && k !== vehHoyKey()) localStorage.removeItem(k); });
+  } catch(e) {}
+}
+
+function renderVehiculos() {
+  const cont = document.getElementById('vehContenido');
+  const reg  = vehRegistroHoy();
+  if (reg) {
+    cont.innerHTML = `
+      <div class="all-done">
+        <div class="all-done-icon">✅</div>
+        <div class="all-done-title">Vehículo registrado hoy</div>
+        <div class="all-done-sub">${esc(reg.vehiculo)}<br>${esc(reg.sucursal)} · ${esc(reg.hora)}hs<br><br>El checklist de Vehículos se vuelve a habilitar mañana.</div>
+        <span class="all-done-kanji">完了</span>
+      </div>`;
+    return;
+  }
+  vState.veh = nuevoVForm();
+  cont.innerHTML = vFormHTML('veh') + `
+    <div class="submit-zone">
+      <button class="submit-btn apertura-btn" id="veh_submit" onclick="enviarVehiculo()">Guardar Vehículo</button>
+    </div>`;
+}
+
+async function enviarVehiculo() {
+  const faltan = vFaltantes('veh');
+  if (faltan.length) { showToast('✗ Falta completar: ' + faltan.join(', '), true); return; }
+
+  const btn = document.getElementById('veh_submit');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  const payload = vPayload('veh', 'guardarVehiculo');
+
+  try {
+    const r = await postScript(payload);
+    if (!r.ok) throw new Error(r.error || 'Error servidor');
+    if (!r.guardado) throw new Error('desactualizado');
+    try {
+      localStorage.setItem(vehHoyKey(), JSON.stringify({ sucursal: payload.sucursal, vehiculo: payload.vehiculo, hora: payload.hora.slice(0, 5) }));
+    } catch(e) {}
+    showToast('✓ Vehículo guardado correctamente');
+    setTimeout(renderVehiculos, 1000);
+  } catch(e) {
+    showToast(e.message === 'desactualizado'
+      ? '✗ Falta implementar la nueva versión del Apps Script'
+      : '✗ Error al guardar. Verificá la conexión.', true);
+    btn.disabled = false; btn.textContent = 'Guardar Vehículo';
+  }
+}
+
+// ── AUDITORÍA ──
+function renderAuditoria() {
+  const cont = document.getElementById('audContenido');
+  if (claveAuditoria) {
+    // Volver a la solapa no borra un formulario a medio completar ni un resultado
+    if (cont.dataset.estado !== 'form' && cont.dataset.estado !== 'resultado') renderAuditoriaForm();
+    return;
+  }
+  cont.dataset.estado = 'bloqueado';
+  cont.innerHTML = `
+    <div class="section lock-card">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">Acceso Supervisores</div>
+      <div class="lock-sub">Ingresá la contraseña para realizar<br>la auditoría de vehículos.</div>
+      <input type="password" id="aud_clave" class="lock-input" placeholder="Contraseña" autocomplete="off"
+             onkeydown="if (event.key === 'Enter') desbloquearAuditoria()">
+      <div class="lock-error hidden" id="aud_error"></div>
+      <button class="submit-btn cierre-btn lock-btn" id="aud_unlock" onclick="desbloquearAuditoria()">Ingresar</button>
+      <span class="all-done-kanji">監査</span>
+    </div>`;
+  setTimeout(() => { const i = document.getElementById('aud_clave'); if (i) i.focus(); }, 50);
+}
+
+async function desbloquearAuditoria() {
+  const input = document.getElementById('aud_clave');
+  const btn   = document.getElementById('aud_unlock');
+  const err   = document.getElementById('aud_error');
+  const clave = input.value.trim();
+  if (!clave) { input.focus(); return; }
+
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  err.classList.add('hidden');
+  try {
+    const r = await postScript({ accion: 'verificarClave', clave: clave });
+    if (r.ok && r.valida === true) { claveAuditoria = clave; renderAuditoriaForm(); return; }
+    err.textContent = (r.ok && r.valida === undefined)
+      ? 'Falta implementar la nueva versión del Apps Script'
+      : 'Contraseña incorrecta';
+  } catch(e) {
+    err.textContent = 'Sin conexión. Probá de nuevo.';
+  }
+  err.classList.remove('hidden');
+  input.value = ''; input.focus();
+  btn.disabled = false; btn.textContent = 'Ingresar';
+}
+
+function renderAuditoriaForm() {
+  vState.aud = nuevoVForm();
+  const cont = document.getElementById('audContenido');
+  cont.dataset.estado = 'form';
+  cont.innerHTML = vFormHTML('aud') + `
+    <div class="submit-zone">
+      <button class="submit-btn cierre-btn" id="aud_submit" onclick="enviarAuditoria()">Guardar Auditoría</button>
+    </div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function enviarAuditoria() {
+  const faltan = vFaltantes('aud');
+  if (faltan.length) { showToast('✗ Falta completar: ' + faltan.join(', '), true); return; }
+
+  const btn = document.getElementById('aud_submit');
+  btn.disabled = true; btn.textContent = 'Comparando...';
+  const payload = vPayload('aud', 'guardarAuditoria');
+  payload.clave = claveAuditoria;
+
+  try {
+    const r = await postScript(payload);
+    if (!r.ok) throw new Error(r.error || 'Error servidor');
+    if (!r.guardado) throw new Error('desactualizado');
+    showToast('✓ Auditoría guardada');
+    renderResultadoAuditoria(r.comparacion, payload);
+  } catch(e) {
+    const msg = e.message === 'desactualizado'   ? '✗ Falta implementar la nueva versión del Apps Script'
+              : e.message === 'Clave incorrecta' ? '✗ Contraseña inválida. Volvé a ingresar.'
+              : '✗ Error al guardar. Verificá la conexión.';
+    showToast(msg, true);
+    if (e.message === 'Clave incorrecta') { claveAuditoria = null; renderAuditoria(); return; }
+    btn.disabled = false; btn.textContent = 'Guardar Auditoría';
+  }
+}
+
+function renderResultadoAuditoria(c, p) {
+  const cont = document.getElementById('audContenido');
+  cont.dataset.estado = 'resultado';
+  const nueva = `
+    <div class="submit-zone">
+      <button class="submit-btn cierre-btn" onclick="renderAuditoriaForm()">Nueva Auditoría</button>
+    </div>`;
+  const cabecera = `
+    <div class="section">
+      <div class="section-header"><div class="section-title">🕵️ &nbsp;${esc(p.vehiculo)} · ${esc(p.sucursal)}</div></div>`;
+
+  if (!c.encontrado) {
+    cont.innerHTML = cabecera + `
+        <div class="all-done">
+          <div class="all-done-icon">📭</div>
+          <div class="all-done-title">Sin registro para comparar</div>
+          <div class="all-done-sub">La auditoría quedó guardada, pero la sucursal no tiene<br>ningún checklist de Vehículos cargado para este vehículo.</div>
+        </div>
+      </div>` + nueva;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const nivel = c.porcentaje >= 90 ? 'alto' : c.porcentaje >= 70 ? 'medio' : 'bajo';
+  const lista = (arr, antes, despues) => arr.map(x => `
+      <div class="aud-item">
+        <div class="aud-area">${esc(x.area)}</div>
+        <div class="aud-item-body">
+          <div class="aud-item-text">${esc(x.item)}</div>
+          ${x.porque ? `<div class="aud-porque">Supervisor: ${esc(x.porque)}</div>` : ''}
+        </div>
+        <div class="aud-tags"><span class="aud-tag ${antes.toLowerCase()}">${antes}</span>→<span class="aud-tag ${despues.toLowerCase()}">${despues}</span></div>
+      </div>`).join('');
+
+  cont.innerHTML = cabecera + `
+      <div class="aud-score">
+        <div class="aud-pct ${nivel}">${c.porcentaje}%</div>
+        <div class="aud-pct-label">Coincidencia con Vehículos</div>
+        <div class="aud-detalle">${c.coincidencias} de ${c.total} respuestas coinciden</div>
+        <div class="aud-ref">Comparado con el checklist del ${esc(c.fechaRef)} a las ${esc(c.horaRef)}hs</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">⚠️ &nbsp;Marcaron SI — el supervisor encontró NO (${c.siNo.length})</div></div>
+      ${c.siNo.length ? lista(c.siNo, 'SI', 'NO') : '<div class="aud-vacio">✓ Ninguna. Todo lo marcado como SI fue verificado.</div>'}
+    </div>
+    ${c.noSi.length ? `
+    <div class="section">
+      <div class="section-header"><div class="section-title">ℹ️ &nbsp;Marcaron NO — el supervisor encontró SI (${c.noSi.length})</div></div>
+      ${lista(c.noSi, 'NO', 'SI')}
+    </div>` : ''}` + nueva;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('load', () => {
+  initApp();
+  limpiarVehViejos();
+  renderVehiculos();
+});
 </script>
 </body>
 </html>
