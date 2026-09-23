@@ -186,6 +186,28 @@
   .aud-tag.no { background: var(--red-light); color: var(--red); }
   .aud-vacio { padding: 16px 18px; font-size: 14px; color: #1a6640; }
 
+  /* ── SELECCIÓN MÚLTIPLE DE VEHÍCULOS ── */
+  .veh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px 18px 10px; }
+  @media (max-width: 430px) { .veh-grid { grid-template-columns: 1fr; } }
+  .veh-chip { padding: 11px 12px; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface); font-family: 'Noto Serif JP', serif; font-size: 13px; color: var(--text-muted); cursor: pointer; text-align: left; transition: all 0.16s; -webkit-tap-highlight-color: transparent; }
+  .veh-chip:hover    { border-color: var(--red); color: var(--red); }
+  .veh-chip.selected { background: var(--red); border-color: var(--red); color: #fff; }
+  .veh-contador { padding: 0 18px 14px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+  .veh-no-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 7px; }
+  .veh-mini-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .veh-mini { padding: 6px 10px; border: 1.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .veh-mini:hover    { border-color: var(--red); color: var(--red); }
+  .veh-mini.selected { background: var(--red); border-color: var(--red); color: #fff; }
+  .veh-aviso { font-size: 12px; color: var(--text-dim); font-weight: 300; margin-bottom: 10px; }
+
+  .aud-veh-header { justify-content: space-between; }
+  .aud-veh-pct { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 900; flex-shrink: 0; }
+  .aud-veh-pct.alto  { color: #1a6640; }
+  .aud-veh-pct.medio { color: #b36b00; }
+  .aud-veh-pct.bajo  { color: var(--red); }
+  .aud-sin { padding: 14px 18px; font-size: 13px; color: var(--text-muted); font-weight: 300; }
+
   .hidden { display: none !important; }
 </style>
 </head>
@@ -808,9 +830,11 @@ let claveAuditoria = null;
 
 function nuevoVForm() {
   return {
-    sucursal: null, vehiculo: '',
-    exterior: { sinoState: {}, porques: {} },
-    interior: { sinoState: {}, porques: {} }
+    sucursal: null,
+    vehiculos: [],   // los vehículos que hay hoy en el salón
+    // vehNO[idx] = vehículos que NO cumplen esa pregunta
+    exterior: { sinoState: {}, porques: {}, vehNO: {} },
+    interior: { sinoState: {}, porques: {}, vehNO: {} }
   };
 }
 
@@ -838,19 +862,17 @@ function vFormHTML(pref) {
     <button class="sucursal-btn" data-sucursal="${id}" onclick="vSelectSucursal('${pref}', this)">
       <span class="check-mark">✓</span>KYOTO<span class="sucursal-city">${ciudad}</span>
     </button>`).join('');
-  const opciones = VEHICULOS.map(v => `<option value="${v}">${v}</option>`).join('');
+  const chips = VEHICULOS.map(v => `
+    <button class="veh-chip" data-veh="${v}" onclick="vToggleVehiculo('${pref}', this)">${v}</button>`).join('');
   return `
     <div class="section">
       <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
       <div class="sucursal-grid">${sucursales}</div>
     </div>
     <div class="section">
-      <div class="section-header"><div class="section-title">🚘 &nbsp;Vehículo</div></div>
-      <div class="veh-select-wrap">
-        <select class="veh-select" id="${pref}_vehiculo" onchange="vState['${pref}'].vehiculo = this.value">
-          <option value="">Seleccioná un vehículo...</option>${opciones}
-        </select>
-      </div>
+      <div class="section-header"><div class="section-title">🚘 &nbsp;Vehículos en el salón</div></div>
+      <div class="veh-grid">${chips}</div>
+      <div class="veh-contador" id="${pref}_contador">Ninguno seleccionado</div>
     </div>
     ${vAreaHTML(pref, 'exterior', '🌤️', 'Exterior')}
     ${vAreaHTML(pref, 'interior', '💺', 'Interior')}
@@ -869,6 +891,8 @@ function vAreaHTML(pref, area, icon, nombre) {
         <button class="sino-btn no" onclick="vSelectSiNo('${pref}','${area}',${idx},'NO',this)">✗ &nbsp;NO</button>
       </div>
       <div class="sino-porque hidden" id="${pref}_pq_${area}_${idx}">
+        <div class="veh-no-label">¿Qué vehículos no cumplen?</div>
+        <div class="veh-mini-grid" id="${pref}_vn_${area}_${idx}"></div>
         <input type="text" placeholder="¿Por qué? Describí el motivo..." oninput="vState['${pref}']['${area}'].porques[${idx}] = this.value">
       </div>
     </div>`).join('');
@@ -900,29 +924,84 @@ function vSelectSiNo(pref, area, idx, valor, btn) {
   const pq = document.getElementById(`${pref}_pq_${area}_${idx}`);
   if (valor === 'NO') {
     pq.classList.remove('hidden');
+    vPintarVehNO(pref, area, idx);
   } else {
     pq.classList.add('hidden');
     f.porques[idx] = '';
+    f.vehNO[idx] = [];
     pq.querySelector('input').value = '';
   }
+}
+
+// ── Vehículos del salón (selección múltiple) ──
+function vToggleVehiculo(pref, btn) {
+  const f = vState[pref];
+  const veh = btn.dataset.veh;
+  const i = f.vehiculos.indexOf(veh);
+  if (i === -1) f.vehiculos.push(veh); else f.vehiculos.splice(i, 1);
+  btn.classList.toggle('selected', i === -1);
+
+  // Si se saca un vehículo, se quita de los NO donde estuviera marcado
+  ['exterior', 'interior'].forEach(area => {
+    Object.keys(vState[pref][area].vehNO).forEach(idx => {
+      vState[pref][area].vehNO[idx] = vState[pref][area].vehNO[idx].filter(v => f.vehiculos.indexOf(v) !== -1);
+      vPintarVehNO(pref, area, idx);
+    });
+  });
+
+  const c = document.getElementById(`${pref}_contador`);
+  if (c) c.textContent = f.vehiculos.length
+    ? `${f.vehiculos.length} vehículo${f.vehiculos.length > 1 ? 's' : ''} seleccionado${f.vehiculos.length > 1 ? 's' : ''}`
+    : 'Ninguno seleccionado';
+}
+
+// Dibuja, dentro de un NO, los vehículos elegidos arriba para marcar cuáles fallan
+function vPintarVehNO(pref, area, idx) {
+  const cont = document.getElementById(`${pref}_vn_${area}_${idx}`);
+  if (!cont) return;
+  const f = vState[pref];
+  const marcados = f[area].vehNO[idx] || [];
+  cont.innerHTML = f.vehiculos.length
+    ? f.vehiculos.map(v => `<button class="veh-mini${marcados.indexOf(v) !== -1 ? ' selected' : ''}" data-veh="${v}" onclick="vToggleVehNO('${pref}','${area}',${idx},this)">${v}</button>`).join('')
+    : '<div class="veh-aviso">Elegí primero los vehículos del salón, arriba.</div>';
+}
+
+function vToggleVehNO(pref, area, idx, btn) {
+  const f = vState[pref][area];
+  if (!f.vehNO[idx]) f.vehNO[idx] = [];
+  const veh = btn.dataset.veh;
+  const i = f.vehNO[idx].indexOf(veh);
+  if (i === -1) f.vehNO[idx].push(veh); else f.vehNO[idx].splice(i, 1);
+  btn.classList.toggle('selected', i === -1);
 }
 
 // Qué falta completar antes de poder guardar
 function vFaltantes(pref) {
   const f = vState[pref];
   const faltan = [];
-  if (!f.sucursal) faltan.push('la sucursal');
-  if (!f.vehiculo) faltan.push('el vehículo');
-  let n = 0;
-  ['exterior', 'interior'].forEach(a => PREGUNTAS_VEHICULO[a].forEach((_, i) => { if (!f[a].sinoState[i]) n++; }));
-  if (n) faltan.push(`${n} pregunta${n > 1 ? 's' : ''}`);
+  if (!f.sucursal)          faltan.push('la sucursal');
+  if (!f.vehiculos.length)  faltan.push('los vehículos del salón');
+  let sinResponder = 0, sinVehiculo = 0;
+  ['exterior', 'interior'].forEach(a => PREGUNTAS_VEHICULO[a].forEach((_, i) => {
+    const r = f[a].sinoState[i];
+    if (!r) sinResponder++;
+    else if (r === 'NO' && !(f[a].vehNO[i] || []).length) sinVehiculo++;
+  }));
+  if (sinResponder) faltan.push(`${sinResponder} pregunta${sinResponder > 1 ? 's' : ''}`);
+  if (sinVehiculo)  faltan.push(`el vehículo en ${sinVehiculo} NO`);
   return faltan;
 }
 
+// Respuesta general de cada pregunta + en qué vehículos falla
 function vItems(pref, area) {
   return PREGUNTAS_VEHICULO[area].map((label, idx) => {
-    const respuesta = vState[pref][area].sinoState[idx] || '';
-    return { item: label, ok: respuesta === 'SI', respuesta: respuesta, porque: vState[pref][area].porques[idx] || '' };
+    const a = vState[pref][area];
+    return {
+      item:        label,
+      respuesta:   a.sinoState[idx] || '',
+      vehiculosNO: a.vehNO[idx] || [],
+      porque:      a.porques[idx] || ''
+    };
   });
 }
 
@@ -933,7 +1012,7 @@ function vPayload(pref, accion) {
     fecha:         getTodayKey(),
     hora:          new Date().toLocaleTimeString('es-AR'),
     sucursal:      f.sucursal,
-    vehiculo:      f.vehiculo,
+    vehiculos:     JSON.stringify(f.vehiculos),
     itemsExterior: JSON.stringify(vItems(pref, 'exterior')),
     itemsInterior: JSON.stringify(vItems(pref, 'interior')),
     obs:           document.getElementById(`${pref}_obs`).value.trim()
@@ -959,11 +1038,12 @@ function renderVehiculos() {
   const cont = document.getElementById('vehContenido');
   const reg  = vehRegistroHoy();
   if (reg) {
+    const lista = (reg.vehiculos || [reg.vehiculo]).filter(Boolean);
     cont.innerHTML = `
       <div class="all-done">
         <div class="all-done-icon">✅</div>
-        <div class="all-done-title">Vehículo registrado hoy</div>
-        <div class="all-done-sub">${esc(reg.vehiculo)}<br>${esc(reg.sucursal)} · ${esc(reg.hora)}hs<br><br>El checklist de Vehículos se vuelve a habilitar mañana.</div>
+        <div class="all-done-title">Vehículos registrados hoy</div>
+        <div class="all-done-sub">${lista.map(esc).join('<br>')}<br><br>${esc(reg.sucursal)} · ${esc(reg.hora)}hs<br><br>El checklist de Vehículos se vuelve a habilitar mañana.</div>
         <span class="all-done-kanji">完了</span>
       </div>`;
     return;
@@ -988,9 +1068,9 @@ async function enviarVehiculo() {
     if (!r.ok) throw new Error(r.error || 'Error servidor');
     if (!r.guardado) throw new Error('desactualizado');
     try {
-      localStorage.setItem(vehHoyKey(), JSON.stringify({ sucursal: payload.sucursal, vehiculo: payload.vehiculo, hora: payload.hora.slice(0, 5) }));
+      localStorage.setItem(vehHoyKey(), JSON.stringify({ sucursal: payload.sucursal, vehiculos: vState.veh.vehiculos, hora: payload.hora.slice(0, 5) }));
     } catch(e) {}
-    showToast('✓ Vehículo guardado correctamente');
+    showToast(`✓ ${vState.veh.vehiculos.length} vehículo${vState.veh.vehiculos.length > 1 ? 's' : ''} guardado${vState.veh.vehiculos.length > 1 ? 's' : ''}`);
     setTimeout(renderVehiculos, 1000);
   } catch(e) {
     showToast(e.message === 'desactualizado'
@@ -1071,7 +1151,7 @@ async function enviarAuditoria() {
     if (!r.ok) throw new Error(r.error || 'Error servidor');
     if (!r.guardado) throw new Error('desactualizado');
     showToast('✓ Auditoría guardada');
-    renderResultadoAuditoria(r.comparacion, payload);
+    renderResultadoAuditoria(r, payload);
   } catch(e) {
     const msg = e.message === 'desactualizado'   ? '✗ Falta implementar la nueva versión del Apps Script'
               : e.message === 'Clave incorrecta' ? '✗ Contraseña inválida. Volvé a ingresar.'
@@ -1082,30 +1162,18 @@ async function enviarAuditoria() {
   }
 }
 
-function renderResultadoAuditoria(c, p) {
+function renderResultadoAuditoria(r, p) {
   const cont = document.getElementById('audContenido');
   cont.dataset.estado = 'resultado';
+  const g = r.resumen || { total: 0, coincidencias: 0, porcentaje: 0, conRegistro: 0 };
+  const comps = r.comparaciones || [];
+  const nivelDe = pct => pct >= 90 ? 'alto' : pct >= 70 ? 'medio' : 'bajo';
+
   const nueva = `
     <div class="submit-zone">
       <button class="submit-btn cierre-btn" onclick="renderAuditoriaForm()">Nueva Auditoría</button>
     </div>`;
-  const cabecera = `
-    <div class="section">
-      <div class="section-header"><div class="section-title">🕵️ &nbsp;${esc(p.vehiculo)} · ${esc(p.sucursal)}</div></div>`;
 
-  if (!c.encontrado) {
-    cont.innerHTML = cabecera + `
-        <div class="all-done">
-          <div class="all-done-icon">📭</div>
-          <div class="all-done-title">Sin registro para comparar</div>
-          <div class="all-done-sub">La auditoría quedó guardada, pero la sucursal no tiene<br>ningún checklist de Vehículos cargado para este vehículo.</div>
-        </div>
-      </div>` + nueva;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
-  }
-
-  const nivel = c.porcentaje >= 90 ? 'alto' : c.porcentaje >= 70 ? 'medio' : 'bajo';
   const lista = (arr, antes, despues) => arr.map(x => `
       <div class="aud-item">
         <div class="aud-area">${esc(x.area)}</div>
@@ -1116,23 +1184,53 @@ function renderResultadoAuditoria(c, p) {
         <div class="aud-tags"><span class="aud-tag ${antes.toLowerCase()}">${antes}</span>→<span class="aud-tag ${despues.toLowerCase()}">${despues}</span></div>
       </div>`).join('');
 
-  cont.innerHTML = cabecera + `
-      <div class="aud-score">
-        <div class="aud-pct ${nivel}">${c.porcentaje}%</div>
-        <div class="aud-pct-label">Coincidencia con Vehículos</div>
-        <div class="aud-detalle">${c.coincidencias} de ${c.total} respuestas coinciden</div>
-        <div class="aud-ref">Comparado con el checklist del ${esc(c.fechaRef)} a las ${esc(c.horaRef)}hs</div>
+  // Resumen general de todos los vehículos auditados
+  let html = `
+    <div class="section">
+      <div class="section-header"><div class="section-title">🕵️ &nbsp;${esc(p.sucursal)} · ${comps.length} vehículo${comps.length > 1 ? 's' : ''}</div></div>`;
+
+  if (!g.conRegistro) {
+    html += `
+      <div class="all-done">
+        <div class="all-done-icon">📭</div>
+        <div class="all-done-title">Sin registros para comparar</div>
+        <div class="all-done-sub">La auditoría quedó guardada, pero esta sucursal no tiene<br>ningún checklist de Vehículos cargado para estos vehículos.</div>
       </div>
-    </div>
+    </div>`;
+    cont.innerHTML = html + nueva;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  html += `
+      <div class="aud-score">
+        <div class="aud-pct ${nivelDe(g.porcentaje)}">${g.porcentaje}%</div>
+        <div class="aud-pct-label">Coincidencia general</div>
+        <div class="aud-detalle">${g.coincidencias} de ${g.total} respuestas coinciden</div>
+        <div class="aud-ref">${g.conRegistro} de ${comps.length} vehículo${comps.length > 1 ? 's' : ''} con checklist para comparar</div>
+      </div>
+    </div>`;
+
+  // Detalle vehículo por vehículo
+  comps.forEach(c => {
+    html += `
     <div class="section">
-      <div class="section-header"><div class="section-title">⚠️ &nbsp;Marcaron SI — el supervisor encontró NO (${c.siNo.length})</div></div>
-      ${c.siNo.length ? lista(c.siNo, 'SI', 'NO') : '<div class="aud-vacio">✓ Ninguna. Todo lo marcado como SI fue verificado.</div>'}
-    </div>
-    ${c.noSi.length ? `
-    <div class="section">
-      <div class="section-header"><div class="section-title">ℹ️ &nbsp;Marcaron NO — el supervisor encontró SI (${c.noSi.length})</div></div>
-      ${lista(c.noSi, 'NO', 'SI')}
-    </div>` : ''}` + nueva;
+      <div class="section-header aud-veh-header">
+        <div class="section-title">🚘 &nbsp;${esc(c.vehiculo)}</div>
+        ${c.encontrado ? `<div class="aud-veh-pct ${nivelDe(c.porcentaje)}">${c.porcentaje}%</div>` : ''}
+      </div>`;
+    if (!c.encontrado) {
+      html += `<div class="aud-sin">Sin checklist de Vehículos previo para comparar.</div></div>`;
+      return;
+    }
+    html += `
+      <div class="aud-sin">${c.coincidencias} de ${c.total} coinciden · checklist del ${esc(c.fechaRef)} ${esc(c.horaRef)}hs</div>
+      ${c.siNo.length ? lista(c.siNo, 'SI', 'NO') : '<div class="aud-vacio">✓ Todo lo marcado como SI fue verificado.</div>'}
+      ${c.noSi.length ? lista(c.noSi, 'NO', 'SI') : ''}
+    </div>`;
+  });
+
+  cont.innerHTML = html + nueva;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
