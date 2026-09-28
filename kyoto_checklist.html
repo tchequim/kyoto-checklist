@@ -135,10 +135,12 @@
   :root {
     --exterior: #0e6b6b; --exterior-bg: #eef7f7; --exterior-border: #8fcaca;
     --interior: #5a1a6e; --interior-bg: #f5eef9; --interior-border: #c09ed0;
+    --entrega:  #8a4b00; --entrega-bg:  #fdf3e6; --entrega-border:  #e0b980;
+    --testdrive:#0b4f8a; --testdrive-bg:#eaf2fa; --testdrive-border:#97bfe0;
   }
   .toast { width: max-content; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
-  .tabs { display: flex; gap: 6px; margin: 14px 16px 0; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; position: relative; z-index: 1; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
-  .tab-btn { flex: 1; padding: 10px 6px 9px; border: none; border-radius: 7px; background: transparent; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 16px 0; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; position: relative; z-index: 1; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .tab-btn { flex: 1 1 28%; min-width: 92px; padding: 10px 6px 9px; border: none; border-radius: 7px; background: transparent; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
   .tab-btn:hover  { background: var(--red-light); color: var(--red); }
   .tab-btn.active { background: var(--red); color: #fff; box-shadow: 0 2px 10px rgba(195,0,47,0.25); }
   .tab-kanji { display: block; font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; margin-bottom: 3px; }
@@ -147,6 +149,15 @@
   .turno-banner.vehiculos .turno-name { color: var(--exterior); }
   .turno-banner.auditoria { background: var(--interior-bg); border: 1px solid var(--interior-border); border-left: 4px solid var(--interior); }
   .turno-banner.auditoria .turno-name { color: var(--interior); }
+  .turno-banner.entregas { background: var(--entrega-bg); border: 1px solid var(--entrega-border); border-left: 4px solid var(--entrega); }
+  .turno-banner.entregas .turno-name { color: var(--entrega); }
+  .turno-banner.testdrive { background: var(--testdrive-bg); border: 1px solid var(--testdrive-border); border-left: 4px solid var(--testdrive); }
+  .turno-banner.testdrive .turno-name { color: var(--testdrive); }
+  .entrega-btn   { background: var(--entrega);   color: #fff; }
+  .testdrive-btn { background: var(--testdrive); color: #fff; }
+  .cliente-wrap { padding: 14px 18px; }
+  .cliente-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface2); font-family: 'Noto Sans JP', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .cliente-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(195,0,47,0.08); }
   .area-header.exterior { background: var(--exterior-bg); border: 1px solid var(--exterior-border); border-left: 4px solid var(--exterior); }
   .area-header.interior { background: var(--interior-bg); border: 1px solid var(--interior-border); border-left: 4px solid var(--interior); }
   .area-header.exterior .area-name { color: var(--exterior); }
@@ -243,6 +254,8 @@
   <div class="tabs">
     <button class="tab-btn active" id="tabBtn_salon"     onclick="mostrarTab('salon')"><span class="tab-kanji">店内</span>Salón</button>
     <button class="tab-btn"        id="tabBtn_vehiculos" onclick="mostrarTab('vehiculos')"><span class="tab-kanji">車両</span>Vehículos</button>
+    <button class="tab-btn"        id="tabBtn_entregas"  onclick="mostrarTab('entregas')"><span class="tab-kanji">納車</span>Entregas</button>
+    <button class="tab-btn"        id="tabBtn_testdrive" onclick="mostrarTab('testdrive')"><span class="tab-kanji">試乗</span>Test Drive</button>
     <button class="tab-btn"        id="tabBtn_auditoria" onclick="mostrarTab('auditoria')"><span class="tab-kanji">監査</span>Auditoría</button>
   </div>
 
@@ -341,6 +354,32 @@
       <div class="turno-side"><div class="turno-kanji">車両</div></div>
     </div>
     <div id="vehContenido"></div>
+  </div>
+
+  <!-- ═══ SOLAPA ENTREGAS ═══ -->
+  <div id="tab_entregas" class="hidden">
+    <div class="turno-banner entregas">
+      <div class="turno-icon">🎁</div>
+      <div class="turno-info">
+        <div class="turno-label">Por cada entrega</div>
+        <div class="turno-name">Checklist de Entregas</div>
+      </div>
+      <div class="turno-side"><div class="turno-kanji">納車</div></div>
+    </div>
+    <div id="entContenido"></div>
+  </div>
+
+  <!-- ═══ SOLAPA TEST DRIVE ═══ -->
+  <div id="tab_testdrive" class="hidden">
+    <div class="turno-banner testdrive">
+      <div class="turno-icon">🔑</div>
+      <div class="turno-info">
+        <div class="turno-label">Por cada prueba de manejo</div>
+        <div class="turno-name">Registro de Test Drive</div>
+      </div>
+      <div class="turno-side"><div class="turno-kanji">試乗</div></div>
+    </div>
+    <div id="tdContenido"></div>
   </div>
 
   <!-- ═══ SOLAPA AUDITORÍA ═══ -->
@@ -825,6 +864,41 @@ const PREGUNTAS_VEHICULO = {
   ]
 };
 
+// ── ENTREGAS: las 4 sucursales + Auditoría ──
+const SUCURSALES_ENT = SUCURSALES_V.map(([id, ciudad]) => [id, ciudad, 'KYOTO'])
+  .concat([['AUDITORÍA', 'Auditoría', 'ÁREA']]);
+
+const PREGUNTAS_ENTREGA = [
+  '¿La carrocería se encuentra completamente limpia y seca?',
+  '¿El vehículo se encuentra correctamente ubicado en la sala de entrega?',
+  '¿Los manuales y documentación correspondiente se encuentran disponibles?',
+  '¿Tiene todas las calcomanías necesarias para la entrega (asistencia de Nissan, calcomanía de Kyoto o Planes, página web)?'
+];
+
+// ── TEST DRIVE: flota propia, con dominio ──
+const VEHICULOS_TD = [
+  'FRONTIER XE 4X2 MT 2.3 D CD-AG416OO',
+  'KICKS 1.6 ADVANCE CVT-AG351NB',
+  'FRONTIER PRO4X 4X4 AT 2.3 D CD-AG416OL',
+  'KICKS 1.6 ADVANCE CVT PLUS-AG404VY',
+  'VERSA 1.6 EXCLUSIVE CVT-AG404VX',
+  'X-TRAIL EPOWER EXCLUSIVE CVT-AG136EW',
+  'FRONTIER XE 4X2 MT 2.3 D CD-AG416OR',
+  'VERSA 1.6 SENSE MT-AG379VB',
+  'FRONTIER PLATINUM 4X4 AT 2.3 D CD-AG416OJ',
+  'KICKS 1.6 ADVANCE CVT PLUS-AG404VW',
+  'VERSA 1.6 EXCLUSIVE CVT-AG404VT',
+  'KICKS 1.6 ADVANCE CVT-AG351NG',
+  'VERSA 1.6 SENSE MT-AG379VA',
+  'FRONTIER PLATINUM 4X4 AT 2.3 D CD-AG416ON',
+  'KICKS 1.6 EXCLUSIVE CVT-AG404VU',
+  'VERSA 1.6 EXCLUSIVE CVT-AG404VV',
+  'FRONTIER S 4X2 AT 2.3 D CD-AF384OB',
+  'FRONTIER XE 4X2 MT 2.3 D CD-AE118GG',
+  'KICKS EXCLUSIVE 1.0 DCT-AI190AA',
+  'KAIT EXCLUSIVE 1.6 CVT-AI564ME'
+];
+
 // 'veh' = solapa Vehículos, 'aud' = solapa Auditoría
 const vState = { veh: nuevoVForm(), aud: nuevoVForm() };
 // La contraseña se valida en el Apps Script y sólo queda en memoria mientras la página esté abierta
@@ -851,7 +925,7 @@ async function postScript(payload) {
 
 // ── SOLAPAS ──
 function mostrarTab(tab) {
-  ['salon', 'vehiculos', 'auditoria'].forEach(t => {
+  ['salon', 'vehiculos', 'entregas', 'testdrive', 'auditoria'].forEach(t => {
     document.getElementById('tab_' + t).classList.toggle('hidden', t !== tab);
     document.getElementById('tabBtn_' + t).classList.toggle('active', t === tab);
   });
@@ -1236,10 +1310,240 @@ function renderResultadoAuditoria(r, p) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ════════════════════════════════════════════════════════════
+// SOLAPA ENTREGAS — un solo vehículo, 4 puntos de control
+// ════════════════════════════════════════════════════════════
+const eState = { sucursal: null, vehiculo: null, sinoState: {}, porques: {} };
+
+// Grilla de sucursales reutilizable (Entregas y Test Drive)
+function sucursalGridHTML(lista, fn) {
+  return lista.map(([id, ciudad, prefijo]) => `
+    <button class="sucursal-btn" data-sucursal="${esc(id)}" onclick="${fn}(this)">
+      <span class="check-mark">✓</span>${esc(prefijo)}<span class="sucursal-city">${esc(ciudad)}</span>
+    </button>`).join('');
+}
+
+// Desplegable de un solo vehículo
+function vehSelectHTML(id, lista, onchange) {
+  const opts = lista.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  return `
+    <div class="veh-select-wrap">
+      <select class="veh-select" id="${id}" onchange="${onchange}">
+        <option value="">— Elegí un vehículo —</option>
+        ${opts}
+      </select>
+    </div>`;
+}
+
+function renderEntregas() {
+  eState.sucursal = null; eState.vehiculo = null; eState.sinoState = {}; eState.porques = {};
+
+  const items = PREGUNTAS_ENTREGA.map((item, idx) => `
+    <div class="sino-item">
+      <div class="sino-label">${esc(item)}</div>
+      <div class="sino-btns">
+        <button class="sino-btn si" onclick="eSelectSiNo(${idx},'SI',this)">✓ &nbsp;SI</button>
+        <button class="sino-btn no" onclick="eSelectSiNo(${idx},'NO',this)">✗ &nbsp;NO</button>
+      </div>
+      <div class="sino-porque hidden" id="ent_pq_${idx}">
+        <input type="text" placeholder="¿Por qué? Describí el motivo..." oninput="eState.porques[${idx}] = this.value">
+      </div>
+    </div>`).join('');
+
+  document.getElementById('entContenido').innerHTML = `
+    <div class="section">
+      <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
+      <div class="sucursal-grid">${sucursalGridHTML(SUCURSALES_ENT, 'eSelectSucursal')}</div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">🚘 &nbsp;Vehículo a entregar</div></div>
+      ${vehSelectHTML('ent_veh', VEHICULOS, 'eState.vehiculo = this.value || null')}
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">🎁 &nbsp;Sala de entrega — ${PREGUNTAS_ENTREGA.length} puntos</div></div>
+      ${items}
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">💬 &nbsp;Observaciones (opcional)</div></div>
+      <div class="obs-body"><textarea id="ent_obs" placeholder="Novedades o comentarios de la entrega..."></textarea></div>
+    </div>
+    <div class="submit-zone">
+      <button class="submit-btn entrega-btn" id="ent_submit" onclick="enviarEntrega()">Guardar Entrega</button>
+    </div>`;
+}
+
+function eSelectSucursal(btn) {
+  btn.parentElement.querySelectorAll('.sucursal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  eState.sucursal = btn.dataset.sucursal;
+}
+
+function eSelectSiNo(idx, valor, btn) {
+  eState.sinoState[idx] = valor;
+  btn.closest('.sino-btns').querySelectorAll('.sino-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const pq = document.getElementById('ent_pq_' + idx);
+  if (valor === 'NO') {
+    pq.classList.remove('hidden');
+  } else {
+    pq.classList.add('hidden');
+    eState.porques[idx] = '';
+    pq.querySelector('input').value = '';
+  }
+}
+
+async function enviarEntrega() {
+  const faltan = [];
+  if (!eState.sucursal) faltan.push('la sucursal');
+  if (!eState.vehiculo) faltan.push('el vehículo');
+  const sinResponder = PREGUNTAS_ENTREGA.filter((_, i) => !eState.sinoState[i]).length;
+  if (sinResponder) faltan.push(`${sinResponder} pregunta${sinResponder > 1 ? 's' : ''}`);
+  if (faltan.length) { showToast('✗ Falta completar: ' + faltan.join(', '), true); return; }
+
+  const btn = document.getElementById('ent_submit');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+
+  const payload = {
+    accion:   'guardarEntrega',
+    fecha:    getTodayKey(),
+    hora:     new Date().toLocaleTimeString('es-AR'),
+    sucursal: eState.sucursal,
+    vehiculo: eState.vehiculo,
+    items:    JSON.stringify(PREGUNTAS_ENTREGA.map((label, i) => ({
+      item:      label,
+      respuesta: eState.sinoState[i],
+      ok:        eState.sinoState[i] === 'SI',
+      porque:    eState.porques[i] || ''
+    }))),
+    obs: document.getElementById('ent_obs').value.trim()
+  };
+
+  try {
+    const r = await postScript(payload);
+    if (!r.ok) throw new Error(r.error || 'Error servidor');
+    if (!r.guardado) throw new Error('desactualizado');
+    showToast('✓ Entrega guardada');
+    document.getElementById('entContenido').innerHTML = `
+      <div class="all-done">
+        <div class="all-done-icon">✅</div>
+        <div class="all-done-title">Entrega registrada</div>
+        <div class="all-done-sub">${esc(payload.vehiculo)}<br>${esc(payload.sucursal)} · ${esc(payload.hora.slice(0, 5))}hs<br><br>${r.cumplidos} de ${r.total} puntos cumplidos (${r.porcentaje}%)</div>
+        <span class="all-done-kanji">納車</span>
+      </div>
+      <div class="submit-zone">
+        <button class="submit-btn entrega-btn" onclick="renderEntregas()">Nueva Entrega</button>
+      </div>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch(e) {
+    showToast(e.message === 'desactualizado'
+      ? '✗ Falta implementar la nueva versión del Apps Script'
+      : '✗ Error al guardar. Verificá la conexión.', true);
+    btn.disabled = false; btn.textContent = 'Guardar Entrega';
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// SOLAPA TEST DRIVE — vehículo, cliente y firma
+// ════════════════════════════════════════════════════════════
+const tState = { sucursal: null, vehiculo: null, firmado: null };
+
+function renderTestDrive() {
+  tState.sucursal = null; tState.vehiculo = null; tState.firmado = null;
+
+  document.getElementById('tdContenido').innerHTML = `
+    <div class="section">
+      <div class="section-header"><div class="section-title">📍 &nbsp;Sucursal</div></div>
+      <div class="sucursal-grid">${sucursalGridHTML(SUCURSALES_ENT, 'tSelectSucursal')}</div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">🔑 &nbsp;Vehículo del test drive</div></div>
+      ${vehSelectHTML('td_veh', VEHICULOS_TD, 'tState.vehiculo = this.value || null')}
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">🙋 &nbsp;Nombre del cliente</div></div>
+      <div class="cliente-wrap">
+        <input type="text" class="cliente-input" id="td_cliente" placeholder="Nombre y apellido" autocomplete="off">
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">✍️ &nbsp;Formulario firmado</div></div>
+      <div class="sino-item">
+        <div class="sino-label">¿El formulario de test drive está firmado por el cliente?</div>
+        <div class="sino-btns">
+          <button class="sino-btn si" onclick="tSelectFirmado('SI',this)">✓ &nbsp;SI</button>
+          <button class="sino-btn no" onclick="tSelectFirmado('NO',this)">✗ &nbsp;NO</button>
+        </div>
+      </div>
+    </div>
+    <div class="submit-zone">
+      <button class="submit-btn testdrive-btn" id="td_submit" onclick="enviarTestDrive()">Guardar Test Drive</button>
+    </div>`;
+}
+
+function tSelectSucursal(btn) {
+  btn.parentElement.querySelectorAll('.sucursal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  tState.sucursal = btn.dataset.sucursal;
+}
+
+function tSelectFirmado(valor, btn) {
+  tState.firmado = valor;
+  btn.closest('.sino-btns').querySelectorAll('.sino-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+async function enviarTestDrive() {
+  const cliente = document.getElementById('td_cliente').value.trim();
+  const faltan = [];
+  if (!tState.sucursal) faltan.push('la sucursal');
+  if (!tState.vehiculo) faltan.push('el vehículo');
+  if (!cliente)         faltan.push('el nombre del cliente');
+  if (!tState.firmado)  faltan.push('si está firmado');
+  if (faltan.length) { showToast('✗ Falta completar: ' + faltan.join(', '), true); return; }
+
+  const btn = document.getElementById('td_submit');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+
+  const payload = {
+    accion:   'guardarTestDrive',
+    fecha:    getTodayKey(),
+    hora:     new Date().toLocaleTimeString('es-AR'),
+    sucursal: tState.sucursal,
+    vehiculo: tState.vehiculo,
+    cliente:  cliente,
+    firmado:  tState.firmado
+  };
+
+  try {
+    const r = await postScript(payload);
+    if (!r.ok) throw new Error(r.error || 'Error servidor');
+    if (!r.guardado) throw new Error('desactualizado');
+    showToast('✓ Test drive guardado');
+    document.getElementById('tdContenido').innerHTML = `
+      <div class="all-done">
+        <div class="all-done-icon">✅</div>
+        <div class="all-done-title">Test drive registrado</div>
+        <div class="all-done-sub">${esc(payload.cliente)}<br>${esc(payload.vehiculo)}<br>${esc(payload.sucursal)} · ${esc(payload.hora.slice(0, 5))}hs<br><br>Formulario firmado: ${esc(payload.firmado)}</div>
+        <span class="all-done-kanji">試乗</span>
+      </div>
+      <div class="submit-zone">
+        <button class="submit-btn testdrive-btn" onclick="renderTestDrive()">Nuevo Test Drive</button>
+      </div>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch(e) {
+    showToast(e.message === 'desactualizado'
+      ? '✗ Falta implementar la nueva versión del Apps Script'
+      : '✗ Error al guardar. Verificá la conexión.', true);
+    btn.disabled = false; btn.textContent = 'Guardar Test Drive';
+  }
+}
+
 window.addEventListener('load', () => {
   initApp();
   limpiarVehViejos();
   renderVehiculos();
+  renderEntregas();
+  renderTestDrive();
 });
 </script>
 </body>
