@@ -159,6 +159,11 @@
   .turno-banner.testdrive .turno-name { color: var(--testdrive); }
   .entrega-btn   { background: var(--entrega);   color: #fff; }
   .testdrive-btn { background: var(--testdrive); color: #fff; }
+  .rating-btns { display: flex; gap: 6px; }
+  .rating-btn { flex: 1; padding: 10px 0; border: 1.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.18s; color: var(--text-muted); -webkit-tap-highlight-color: transparent; }
+  .rating-btn:hover  { border-color: var(--testdrive); color: var(--testdrive); }
+  .rating-btn.active { background: var(--testdrive); border-color: var(--testdrive); color: #fff; }
+  .rating-escala { display: flex; justify-content: space-between; margin-top: 6px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
   .cliente-wrap { padding: 14px 18px; }
   .cliente-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface2); font-family: 'Noto Sans JP', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
   .cliente-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(195,0,47,0.08); }
@@ -879,6 +884,14 @@ const PREGUNTAS_ENTREGA = [
   '¿Tiene todas las calcomanías necesarias para la entrega (asistencia de Nissan, calcomanía de Kyoto o Planes, página web)?'
 ];
 
+// ── TEST DRIVE: feedback del cliente (escala 1 a 5) ──
+const FEEDBACK_TD = [
+  'Satisfacción con la experiencia del Test Drive',
+  'Explicaciones y demostraciones recibidas durante el Test Drive',
+  'Satisfacción con el Nissan que manejó',
+  'Estado del vehículo (limpieza, combustible, otros)'
+];
+
 // ── TEST DRIVE: flota propia, con dominio ──
 const VEHICULOS_TD = [
   'FRONTIER XE 4X2 MT 2.3 D CD-AG416OO',
@@ -1449,10 +1462,19 @@ async function enviarEntrega() {
 // ════════════════════════════════════════════════════════════
 // SOLAPA TEST DRIVE — vehículo, cliente y firma
 // ════════════════════════════════════════════════════════════
-const tState = { sucursal: null, vehiculo: null, firmado: null };
+const tState = { sucursal: null, vehiculo: null, firmado: null, feedback: {} };
 
 function renderTestDrive() {
-  tState.sucursal = null; tState.vehiculo = null; tState.firmado = null;
+  tState.sucursal = null; tState.vehiculo = null; tState.firmado = null; tState.feedback = {};
+
+  const feedback = FEEDBACK_TD.map((item, idx) => `
+      <div class="sino-item">
+        <div class="sino-label">${esc(item)}</div>
+        <div class="rating-btns">
+          ${[1, 2, 3, 4, 5].map(n => `<button class="rating-btn" onclick="tSelectFeedback(${idx},${n},this)">${n}</button>`).join('')}
+        </div>
+        <div class="rating-escala"><span>1 · Muy malo</span><span>5 · Excelente</span></div>
+      </div>`).join('');
 
   document.getElementById('tdContenido').innerHTML = `
     <div class="section">
@@ -1479,9 +1501,23 @@ function renderTestDrive() {
         </div>
       </div>
     </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">⭐ &nbsp;Feedback del cliente — ${FEEDBACK_TD.length} puntos</div></div>
+      ${feedback}
+    </div>
+    <div class="section">
+      <div class="section-header"><div class="section-title">💬 &nbsp;Observaciones (opcional)</div></div>
+      <div class="obs-body"><textarea id="td_obs" placeholder="Novedades o comentarios del test drive..."></textarea></div>
+    </div>
     <div class="submit-zone">
       <button class="submit-btn testdrive-btn" id="td_submit" onclick="enviarTestDrive()">Guardar Test Drive</button>
     </div>`;
+}
+
+function tSelectFeedback(idx, valor, btn) {
+  tState.feedback[idx] = valor;
+  btn.closest('.rating-btns').querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 function tSelectSucursal(btn) {
@@ -1503,6 +1539,8 @@ async function enviarTestDrive() {
   if (!tState.vehiculo) faltan.push('el vehículo');
   if (!cliente)         faltan.push('el nombre del cliente');
   if (!tState.firmado)  faltan.push('si está firmado');
+  const sinCalificar = FEEDBACK_TD.filter((_, i) => !tState.feedback[i]).length;
+  if (sinCalificar)     faltan.push(`${sinCalificar} punto${sinCalificar > 1 ? 's' : ''} del feedback`);
   if (faltan.length) { showToast('✗ Falta completar: ' + faltan.join(', '), true); return; }
 
   const btn = document.getElementById('td_submit');
@@ -1515,7 +1553,9 @@ async function enviarTestDrive() {
     sucursal: tState.sucursal,
     vehiculo: tState.vehiculo,
     cliente:  cliente,
-    firmado:  tState.firmado
+    firmado:  tState.firmado,
+    feedback: JSON.stringify(FEEDBACK_TD.map((item, i) => ({ item: item, valor: tState.feedback[i] }))),
+    obs:      document.getElementById('td_obs').value.trim()
   };
 
   try {
